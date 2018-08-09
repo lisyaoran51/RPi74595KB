@@ -40,10 +40,11 @@ SH_CP
 //latch ST_CP
 //#define CE_PIN RPI_GPIO_P1_22
 #define CE_PIN RPI_BPLUS_GPIO_J8_35
-#define true 1
-#define false 0
 
-#define LAMPS_COUNT 40
+
+#define KEY RPI_BPLUS_GPIO_J8_40 
+
+
 
 // get bcm2835
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
@@ -80,9 +81,8 @@ int main(int argc, char **argv) {
 	
 	
 	bool change = true;
-	lampindex = 0;
     while (1) {
-		
+		int c;
 				bcm2835_gpio_write(CE_PIN, LOW);
 				
 				   for (c = 0; c < 8; c++) {
