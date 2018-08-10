@@ -36,7 +36,7 @@ SH_CP
 
 //clock SH_CP
 //#define CL_PIN RPI_GPIO_P1_16
-#define CL_PIN RPI_BPLUS_GPIO_J8_33 
+#define CL_PIN RPI_BPLUS_GPIO_J8_31 
 
 //latch ST_CP
 //#define CE_PIN RPI_GPIO_P1_22
@@ -49,7 +49,7 @@ SH_CP
 
 // get bcm2835
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
-// g++ Pi74595.cpp -lbcm2835
+// g++ Pi74595.cpp -lbcm2835 -pthread
 
 // https://appelsiini.net/2012/driving-595-shift-registers/
 
