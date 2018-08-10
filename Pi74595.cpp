@@ -12,7 +12,7 @@
 #include <sys/ioctl.h>
 #include <bcm2835.h>
 #include <string>
-//#include <thread>
+#include <thread>
 
 // https://github.com/mignev/shiftpi
 /*
@@ -34,7 +34,7 @@ SH_CP
 
 //clock SH_CP
 //#define CL_PIN RPI_GPIO_P1_16
-#define CL_PIN RPI_BPLUS_GPIO_J8_33 
+#define CL_PIN RPI_BPLUS_GPIO_J8_31 
 
 //latch ST_CP
 //#define CE_PIN RPI_GPIO_P1_22
@@ -115,26 +115,26 @@ bool CheckKey(int key){
 			
 			// register是從最後一顆開始往回存，7->0
 			for( int j = 7; j >= 0; j--){
-				usleep(100);
+				usleep(1000);
 				bcm2835_gpio_write(DI_PIN, j == highBit ? HIGH : LOW);
-				usleep(100);
+				usleep(1000);
 				bcm2835_gpio_write(CL_PIN, LOW);
-				usleep(100);
+				usleep(1000);
 				bcm2835_gpio_write(CL_PIN, HIGH);
 			}
 		}
 		else{
 			for( int j = 0; j < 8; j++){
-				usleep(100);
+				usleep(1000);
 				bcm2835_gpio_write(DI_PIN, LOW);
-				usleep(100);
+				usleep(1000);
 				bcm2835_gpio_write(CL_PIN, LOW);
-				usleep(100);
+				usleep(1000);
 				bcm2835_gpio_write(CL_PIN, HIGH);
 			}
 		}
 	}
-	usleep(100);
+	usleep(1000);
 	bcm2835_gpio_write(CE_PIN, HIGH);
 	
 	usleep(500);
