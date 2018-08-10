@@ -95,7 +95,7 @@ bool CheckKey(int key){
 	int registerNumber = key / 12 * 2 + (key % 12) / 8;
 	int highBit = key % 12 % 8;
 	
-	printf("%d %d\n", registerNumber, highBit);
+	//printf("%d %d\n", registerNumber, highBit);
 	
 	bcm2835_gpio_write(CE_PIN, LOW);
 	
