@@ -63,13 +63,13 @@ void AplayString(string s);
 int main(int argc, char **argv) {
 	
 	
-	//thread t1(AplayString, "aplay say.wav");
-	//t1.detach();
-	////system("aplay say.wav");
-	//usleep(500000);
-	//thread t2(AplayString, "aplay thwap.wav");
-	//t2.detach();
-	//system("aplay thwap.wav");
+	thread t1(AplayString, "aplay say.wav");
+	t1.detach();
+	//system("aplay say.wav");
+	usleep(500000);
+	thread t2(AplayString, "aplay thwap.wav");
+	t2.detach();
+	system("aplay thwap.wav");
 	
 	if (!bcm2835_init())return 1;
 	
@@ -120,26 +120,26 @@ bool CheckKey(int key){
 			
 			// register是從最後一顆開始往回存，7->0
 			for( int j = 7; j >= 0; j--){
-				usleep(1000);
+				//usleep(1000);
 				bcm2835_gpio_write(DI_PIN, j == highBit ? HIGH : LOW);
-				usleep(1000);
+				//usleep(1000);
 				bcm2835_gpio_write(CL_PIN, LOW);
-				usleep(1000);
+				//usleep(1000);
 				bcm2835_gpio_write(CL_PIN, HIGH);
 			}
 		}
 		else{
 			for( int j = 0; j < 8; j++){
-				usleep(1000);
+				//usleep(1000);
 				bcm2835_gpio_write(DI_PIN, LOW);
-				usleep(1000);
+				//usleep(1000);
 				bcm2835_gpio_write(CL_PIN, LOW);
-				usleep(1000);
+				//usleep(1000);
 				bcm2835_gpio_write(CL_PIN, HIGH);
 			}
 		}
 	}
-	usleep(1000);
+	//usleep(1000);
 	bcm2835_gpio_write(CE_PIN, HIGH);
 	
 	usleep(500);
