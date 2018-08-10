@@ -53,9 +53,9 @@ SH_CP
 // https://appelsiini.net/2012/driving-595-shift-registers/
 
 
+bool CheckKey(int key);
 
-
-
+void Play(int key);
  
   
 int main(int argc, char **argv) {
