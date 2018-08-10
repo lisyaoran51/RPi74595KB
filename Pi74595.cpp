@@ -92,7 +92,7 @@ int main(int argc, char **argv) {
 	
 bool CheckKey(int key){
 	
-	int registerNumber = key / 12 * 2 + (i % 12) / 8;
+	int registerNumber = key / 12 * 2 + (key % 12) / 8;
 	int highBit = key % 12 % 8;
 	
 	bcm2835_gpio_write(CE_PIN, LOW);
