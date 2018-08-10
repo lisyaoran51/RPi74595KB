@@ -11,7 +11,7 @@
 #include <linux/kd.h>
 #include <sys/ioctl.h>
 #include <bcm2835.h>
-#include <thread>
+//#include <thread>
 
 // https://github.com/mignev/shiftpi
 /*
@@ -33,7 +33,7 @@ SH_CP
 
 //clock SH_CP
 //#define CL_PIN RPI_GPIO_P1_16
-#define CL_PIN RPI_BPLUS_GPIO_J8_31 
+#define CL_PIN RPI_BPLUS_GPIO_J8_33 
 
 //latch ST_CP
 //#define CE_PIN RPI_GPIO_P1_22
