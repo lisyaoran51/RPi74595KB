@@ -152,5 +152,5 @@ void Play(int key){
 }
 
 void AplayString(string s){
-	system(s);
+	system(s.c_str());
 }
