@@ -42,7 +42,7 @@ SH_CP
 #define CE_PIN RPI_BPLUS_GPIO_J8_35
 
 
-#define KEY RPI_BPLUS_GPIO_J8_40 
+#define INPUT_PIN RPI_BPLUS_GPIO_J8_40 
 
 
 
@@ -62,44 +62,70 @@ int main(int argc, char **argv) {
 	
 	
 	if (!bcm2835_init())return 1;
-    // Sets the pin as input.
-    bcm2835_gpio_fsel(KEY, BCM2835_GPIO_FSEL_INPT);
+	// Sets the pin as input.
+    bcm2835_gpio_fsel(INPUT_PIN, BCM2835_GPIO_FSEL_INPT);
     // Sets the Pull-up mode for the pin.
-    bcm2835_gpio_set_pud(KEY, BCM2835_GPIO_PUD_UP);
-    printf("Key Test Program!!!!\n");  
-    while (1)
-    {  
-        // Reads the current level on the specified pin and returns either HIGH or LOW (0 or 1).
-        if(bcm2835_gpio_lev(KEY) == 0)
-        {  
-            printf ("KEY PRESS\n") ;
-            while(bcm2835_gpio_lev(KEY) == 0)
-                bcm2835_delay(100);
-        }  
-        bcm2835_delay(100);
-    }  
+    bcm2835_gpio_set_pud(INPUT_PIN, BCM2835_GPIO_PUD_UP);
 	
+	bool keyPlaying[48];
+	for(int i = 0; i < 48; i++) keyPlaying[i] = false;
 	
-	bool change = true;
-    while (1) {
-		int c;
-				bcm2835_gpio_write(CE_PIN, LOW);
+	bool running = true;
+	while(running){
+		for(int i = 0; i < 48; i++){
+			if(CheckKey(i)){
+				if(!keyPlaying[i])
+					Play(i);
 				
-				   for (c = 0; c < 8; c++) {
-						//usleep(interval);
-						bcm2835_gpio_write(CL_PIN, LOW);
-						bcm2835_gpio_write(DI_PIN,change ? HIGH : LOW );
-						//bcm2835_gpio_write(DI_PIN, LOW);
-						bcm2835_gpio_write(CL_PIN, HIGH);
-						//usleep(interval);
-					}
-					change = !change;
-					printf(" %d\n", change?1:0);
-				//usleep(50 * interval);
-				bcm2835_gpio_write(CE_PIN, HIGH);
-			//}
+				keyPlaying[i] = true;
+			}
+			else{
+				keyPlaying[i] = false;
+			}
 		}
-
-    bcm2835_close();
-    return 0;
+	}
+	
+	bcm2835_close();
+	return 0;
+}
+	
+	
+bool CheckKey(int key){
+	
+	int registerNumber = key / 12 * 2 + (i % 12) / 8;
+	int highBit = key % 12 % 8;
+	
+	bcm2835_gpio_write(CE_PIN, LOW);
+	
+	for(int i = 7; i >= 0; i--){
+		
+		if(i == registerNumber){
+			
+			// register是從最後一顆開始往回存，7->0
+			for( int j = 7; j >= 0; j--){
+				bcm2835_gpio_write(CL_PIN, LOW);
+				bcm2835_gpio_write(DI_PIN,j == highBit ? HIGH : LOW );
+				bcm2835_gpio_write(CL_PIN, HIGH);
+			}
+		}
+		else(
+			for( int j = 0; j < 8; j++){
+				bcm2835_gpio_write(CL_PIN, LOW);
+				bcm2835_gpio_write(DI_PIN, LOW );
+				bcm2835_gpio_write(CL_PIN, HIGH);
+			}
+		}
+	}
+	
+	bcm2835_gpio_write(CE_PIN, HIGH);
+	
+	if(bcm2835_gpio_lev(INPUT_PIN) == HIGH)
+		return true;
+	
+	return false;
+	
+}
+	
+void Play(int key){
+	printf("press!\n");
 }
