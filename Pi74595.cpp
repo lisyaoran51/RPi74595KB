@@ -34,7 +34,7 @@ SH_CP
 
 //clock SH_CP
 //#define CL_PIN RPI_GPIO_P1_16
-#define CL_PIN RPI_BPLUS_GPIO_J8_27 
+#define CL_PIN RPI_BPLUS_GPIO_J8_26 
 
 //latch ST_CP
 //#define CE_PIN RPI_GPIO_P1_22
