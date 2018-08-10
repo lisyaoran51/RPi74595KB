@@ -11,7 +11,7 @@
 #include <linux/kd.h>
 #include <sys/ioctl.h>
 #include <bcm2835.h>
-#include <string.h>
+#include <string>
 //#include <thread>
 
 // https://github.com/mignev/shiftpi
