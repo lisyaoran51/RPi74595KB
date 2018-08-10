@@ -13,9 +13,6 @@
 #include <bcm2835.h>
 #include <thread>
 
-//#include "clientserver.h"
-//#include "demonize.h"
-
 // https://github.com/mignev/shiftpi
 /*
 
@@ -128,9 +125,9 @@ bool CheckKey(int key){
 		else{
 			for( int j = 0; j < 8; j++){
 				usleep(100);
-				bcm2835_gpio_write(CL_PIN, LOW);
-				usleep(100);
 				bcm2835_gpio_write(DI_PIN, LOW);
+				usleep(100);
+				bcm2835_gpio_write(CL_PIN, LOW);
 				usleep(100);
 				bcm2835_gpio_write(CL_PIN, HIGH);
 			}
