@@ -152,6 +152,8 @@ bool CheckKey(int key){
 	
 void Play(int key){
 	printf("%d press!\n", key);
+	thread t(AplayString, "aplay thwap.wav");
+	t.detach()
 }
 
 void AplayString(string s){
