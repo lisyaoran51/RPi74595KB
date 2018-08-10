@@ -129,5 +129,5 @@ bool CheckKey(int key){
 }
 	
 void Play(int key){
-	//printf("press!\n");
+	printf("%d press!\n", key);
 }
