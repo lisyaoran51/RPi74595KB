@@ -30,15 +30,15 @@ SH_CP
 
 //data DS 
 //#define DI_PIN RPI_GPIO_P1_18 
-#define DI_PIN RPI_BPLUS_GPIO_J8_37 
+#define DI_PIN RPI_BPLUS_GPIO_J8_31 
 
 //clock SH_CP
 //#define CL_PIN RPI_GPIO_P1_16
-#define CL_PIN RPI_BPLUS_GPIO_J8_31 
+#define CL_PIN RPI_BPLUS_GPIO_J8_27 
 
 //latch ST_CP
 //#define CE_PIN RPI_GPIO_P1_22
-#define CE_PIN RPI_BPLUS_GPIO_J8_35
+#define CE_PIN RPI_BPLUS_GPIO_J8_29
 
 
 #define INPUT_PIN RPI_BPLUS_GPIO_J8_40 
