@@ -60,6 +60,9 @@ void Play(int key);
   
 int main(int argc, char **argv) {
 	
+	system("aplay say.wav");
+	usleep(500000);
+	system("aplay thwap.wav");
 	
 	if (!bcm2835_init())return 1;
 	// Sets the pin as input.
