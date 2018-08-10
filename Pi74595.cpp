@@ -108,7 +108,7 @@ bool CheckKey(int key){
 				bcm2835_gpio_write(CL_PIN, HIGH);
 			}
 		}
-		else(
+		else{
 			for( int j = 0; j < 8; j++){
 				bcm2835_gpio_write(CL_PIN, LOW);
 				bcm2835_gpio_write(DI_PIN, LOW );
