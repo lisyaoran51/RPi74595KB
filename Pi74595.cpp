@@ -11,6 +11,7 @@
 #include <linux/kd.h>
 #include <sys/ioctl.h>
 #include <bcm2835.h>
+#include <thread>
 
 //#include "clientserver.h"
 //#include "demonize.h"
@@ -53,16 +54,24 @@ SH_CP
 // https://appelsiini.net/2012/driving-595-shift-registers/
 
 
+using namespace std;
+
 bool CheckKey(int key);
 
 void Play(int key);
  
+void AplayString(string s);
   
 int main(int argc, char **argv) {
 	
-	system("aplay say.wav");
+	
+	thread t1(AplayString, "aplay say.wav");
+	t1.detach();
+	//system("aplay say.wav");
 	usleep(500000);
-	system("aplay thwap.wav");
+	thread t2(AplayString, "aplay thwap.wav");
+	t2.detach();
+	//system("aplay thwap.wav");
 	
 	if (!bcm2835_init())return 1;
 	// Sets the pin as input.
@@ -140,4 +149,8 @@ bool CheckKey(int key){
 	
 void Play(int key){
 	printf("%d press!\n", key);
+}
+
+void AplayString(string s){
+	system(s);
 }
