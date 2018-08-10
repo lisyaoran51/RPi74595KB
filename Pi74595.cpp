@@ -65,12 +65,12 @@ void AplayString(string s);
 int main(int argc, char **argv) {
 	
 	
-	thread t1(AplayString, "aplay say.wav");
-	t1.detach();
-	//system("aplay say.wav");
-	usleep(500000);
-	thread t2(AplayString, "aplay thwap.wav");
-	t2.detach();
+	//thread t1(AplayString, "aplay say.wav");
+	//t1.detach();
+	////system("aplay say.wav");
+	//usleep(500000);
+	//thread t2(AplayString, "aplay thwap.wav");
+	//t2.detach();
 	//system("aplay thwap.wav");
 	
 	if (!bcm2835_init())return 1;
