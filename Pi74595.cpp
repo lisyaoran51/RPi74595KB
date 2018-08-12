@@ -51,6 +51,8 @@ SH_CP
 
 // https://appelsiini.net/2012/driving-595-shift-registers/
 
+// i+21-9
+
 
 using namespace std;
 
@@ -152,7 +154,12 @@ bool CheckKey(int key){
 	
 void Play(int key){
 	printf("%d press!\n", key);
-	thread t(AplayString, "aplay thwap.wav");
+	
+	int pitch = key + 24;
+	
+	string s = string("aplay Audio/German Concert D 0") + string(pitch+21-9) + string(" 083.wav");
+	
+	thread t(AplayString, s);
 	t.detach();
 }
 
