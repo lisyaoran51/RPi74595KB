@@ -65,7 +65,7 @@ bool CheckKey(int key);
 
 void Play(int key);
  
-void AplayString(string s);
+void AplayString(string s, int key);
   
 int main(int argc, char **argv) {
 	
