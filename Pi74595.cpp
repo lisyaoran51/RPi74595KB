@@ -65,8 +65,8 @@ void AplayString(string s);
 int main(int argc, char **argv) {
 	
 	
-	thread t1(AplayString, "aplay say.wav");
-	t1.detach();
+	//thread t1(AplayString, "aplay say.wav");
+	//t1.detach();
 	//system("aplay say.wav");
 	usleep(500000);
 	thread t2(AplayString, "aplay thwap.wav");
