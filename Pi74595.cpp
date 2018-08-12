@@ -160,7 +160,7 @@ bool CheckKey(int key){
 }
 	
 void Play(int key){
-	printf("%d press!\n", key);
+	//printf("%d press!\n", key);
 	
 	int pitch = key + 24;
 	
@@ -168,9 +168,14 @@ void Play(int key){
 	
 	thread t(AplayString, s, key);
 	
-	if(handler[key])
+	printf("[%d] ", key);
+	
+	if(handler[key]){
 		pthread_cancel(handler[key]);
+		printf("The last process num is %d. ", handler[key]);
+	}
 	handler[key] = t.native_handle();
+	printf("The new process num is %d.\n", handler[key]);
 	
 	t.detach();
 	
@@ -178,5 +183,6 @@ void Play(int key){
 
 void AplayString(string s, int key){
 	system(s.c_str());
+	printf("[%d] Process %d ends.\n", key, handler[key]);
 	handler[key] = NULL;
 }
