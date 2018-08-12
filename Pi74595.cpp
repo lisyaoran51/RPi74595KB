@@ -53,8 +53,13 @@ SH_CP
 
 // i+21-9
 
+// 刪thread
+// https://www.bo-yang.net/2017/11/19/cpp-kill-detached-thread
+
 
 using namespace std;
+
+pthread_t handler[48];
 
 bool CheckKey(int key);
 
@@ -64,6 +69,8 @@ void AplayString(string s);
   
 int main(int argc, char **argv) {
 	
+	for(int i = 0; i < 48; i++)
+		handler[i] = NULL;
 	
 	//thread t1(AplayString, "aplay say.wav");
 	//t1.detach();
@@ -159,10 +166,17 @@ void Play(int key){
 	
 	string s = string("aplay Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 	
-	thread t(AplayString, s);
+	thread t(AplayString, s, key);
+	
+	if(handler[key])
+		pthread_cancel(handler[key]);
+	handler[key] = t.native_handle();
+	
 	t.detach();
+	
 }
 
-void AplayString(string s){
+void AplayString(string s, int key){
 	system(s.c_str());
+	handler[key] = NULL;
 }
