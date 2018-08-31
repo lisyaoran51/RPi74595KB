@@ -1,0 +1,93 @@
+
+https://blog.csdn.net/jzjhome/article/details/73250450
+
+ pcm.card0 {
+    type hw
+    card 0
+}
+pcm.!default {
+    type plug
+    slave.pcm "dmixer"
+}
+pcm.dmixer  {
+    type dmix
+    ipc_key 1025
+    slave {
+        pcm "hw:0,0"
+        period_time 0
+        period_size 4096
+        buffer_size 16384 
+        periods 128
+        rate 44100
+    }
+    bindings {
+        0 0
+        1 1
+    }
+}
+
+
+https://www.alsa-project.org/main/index.php/Asoundrc
+pcm.!default {
+	type plug
+	slave.pcm "dmixer"
+}
+
+pcm.dmixer  {
+ 	type dmix
+ 	ipc_key 1024
+ 	slave {
+		pcm "hw:1,0"
+		period_time 0
+		period_size 1024
+		buffer_size 4096
+		rate 44100
+	}
+	bindings {
+		0 0
+		1 1
+	}
+}
+
+ctl.dmixer {
+	type hw
+	card 0
+}
+
+https://alsa.opensrc.org/Dmix
+pcm.!default {
+   type plug
+   slave.pcm "dmixer"
+}
+
+pcm.dmixer  {
+   type dmix
+   ipc_key 1024
+   slave {
+      pcm "hw:0,0"
+      format S32_LE
+      period_time 0
+      period_size 1024
+      buffer_size 8192
+
+      rate 96000
+   }
+   bindings {
+      0 0
+      1 1
+   }
+}
+
+ctl.dmixer {
+   type hw
+   card 0
+   device 0
+}
+pcm.dsp {
+    type plug
+    slave.pcm "dmixer"     # use our new PCM here
+}
+ctl.mixer {
+    type hw
+    card 0
+}

@@ -56,10 +56,15 @@ SH_CP
 // 刪thread
 // https://www.bo-yang.net/2017/11/19/cpp-kill-detached-thread
 
+// 音源
+// https://www.raspberrypi.org/blog/tinkernut-diy-pi-zero-audio/
 
 using namespace std;
 
 pthread_t handler[48];
+
+unsigned char* wavSample[48];
+int wavSize[48];
 
 bool CheckKey(int key);
 
@@ -69,8 +74,15 @@ void AplayString(string s, int key);
   
 int main(int argc, char **argv) {
 	
+	// 把thread址標清掉
 	for(int i = 0; i < 48; i++)
 		handler[i] = NULL;
+	
+	// 把wav讀進來
+	for(int i = 0; i < 48; i++){
+		
+		
+	}
 	
 	//thread t1(AplayString, "aplay say.wav");
 	//t1.detach();
