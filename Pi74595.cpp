@@ -49,6 +49,9 @@ SH_CP
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
 // g++ Pi74595.cpp -lbcm2835 -pthread
 
+// 要先打開pulseaudio
+// pulseaudio -D --system 
+
 // https://appelsiini.net/2012/driving-595-shift-registers/
 
 // i+21-9
