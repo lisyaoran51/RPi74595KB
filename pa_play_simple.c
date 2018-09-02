@@ -9,6 +9,8 @@
  *   ./pa_play_simple [sink_name] < cool_song_samples
  */
 
+// gcc -ggdb -Wall -o pa_play_simple pa_play_simple.c -lpulse-simple -lpulse
+ 
 #include <pulse/simple.h>
 #include <pulse/error.h>
 #include <pulse/rtclock.h>
