@@ -9,6 +9,8 @@
  *   ./pa_play_simple [sink_name] < cool_song_samples
  */
 
+ // http://maemo.org/api_refs/5.0/5.0-final/pulseaudio/examples.html
+ 
 // gcc -ggdb -Wall -o pa_play_simple pa_play_simple.c -lpulse-simple -lpulse
  
 #include <pulse/simple.h>

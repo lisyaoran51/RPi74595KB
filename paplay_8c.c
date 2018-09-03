@@ -20,7 +20,9 @@
   USA.
 ***/
 
-// gcc -ggdb -Wall -o paplay_8c paplay_8c.c -lpulse
+// gcc -ggdb -Wall -o paplay_8c paplay_8c.c -I/home/pi/pulseaudio -I/home/pi/pulseaudio/src -L/usr/lib/pulseaudio -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpulsecore-12.0 -lpulsecommon-12.0
+
+// PA_DIR=/home/pi/pulseaudio
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -39,7 +41,7 @@
 #include <sndfile.h>
 
 #include <pulse/pulseaudio.h>
-#include <pulse/i18n.h>
+#include <pulsecore/i18n.h>
 
 static pa_context *context = NULL;
 static pa_stream *stream = NULL;
