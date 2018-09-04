@@ -399,11 +399,13 @@ int main(int argc, char *argv[]) {
     }
 
     mainloop_api = pa_mainloop_get_api(m);
-	/*** ***/
-	goto quit;
+	
 	
 	
     r = pa_signal_init(mainloop_api);
+	/*** ***/
+	goto quit;
+	
     assert(r == 0);
     pa_signal_new(SIGINT, exit_signal_callback, NULL);
 #ifdef SIGPIPE
