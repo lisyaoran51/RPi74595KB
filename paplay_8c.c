@@ -40,6 +40,7 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <locale.h>
+#include <stdbool.h> 
 
 #include <sndfile.h>
 
