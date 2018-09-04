@@ -45,6 +45,7 @@
 
 #include <pulse/pulseaudio.h>
 #include <pulsecore/i18n.h>
+#include <pulse/mainloop.h>
 
 // gcc -ggdb -Wall -o paplay_8c paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
 // pulseaudio -D --system 
@@ -69,6 +70,9 @@ static pa_channel_map channel_map;
 static int channel_map_set = 0;
 
 static sf_count_t (*readf_function)(SNDFILE *_sndfile, void *ptr, sf_count_t frames) = NULL;
+
+int my_pa_mainloop_run(pa_mainloop *m, int *retval);
+
 
 /* A shortcut for terminating the application */
 static void quit(int ret) {
@@ -430,7 +434,7 @@ int main(int argc, char *argv[]) {
 	//}
 	//printf("aaaaaaaaaaaaaa\n");
     /* Run the main loop */
-    if (pa_mainloop_run(m, &ret) < 0) {
+    if (my_pa_mainloop_run(m, &ret) < 0) {
         fprintf(stderr, _("pa_mainloop_run() failed.\n"));
         goto quit;
     }
@@ -456,4 +460,27 @@ quit:
         sf_close(sndfile);
 
     return ret;
+}
+
+int my_pa_mainloop_run(pa_mainloop *m, int *retval) {
+    int r;
+	
+	bool firstRun = true;
+	
+    while ((r = pa_mainloop_iterate(m, 1, retval)) >= 0){
+		if(firstRun){
+			firstRun = false;
+			for(int i = 0; i < 5000; i++){
+				printf("-");
+				usleep(100);
+			}
+			printf("aaaaaaaaaaaaaa\n");
+		}
+	}
+		
+
+    if (r == -2)
+        return 1;
+    else
+        return -1;
 }
