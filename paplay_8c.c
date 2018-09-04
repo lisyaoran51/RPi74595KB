@@ -426,8 +426,9 @@ int main(int argc, char *argv[]) {
     }
 	for(int i = 0; i < 5000; i++){
 		printf("-");
+		usleep(100);
 	}
-	printf("a");
+	printf("aaaaaaaaaaaaaa\n");
     /* Run the main loop */
     if (pa_mainloop_run(m, &ret) < 0) {
         fprintf(stderr, _("pa_mainloop_run() failed.\n"));
