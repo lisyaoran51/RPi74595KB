@@ -23,6 +23,7 @@
 
 
 // gcc -ggdb -Wall -o paplay_8c paplay_8c.c -I/home/pi/pulseaudio -I/home/pi/pulseaudio/src -L/usr/lib/pulseaudio -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpulsecore-12.0 -lpulsecommon-12.0
+// gcc -ggdb -Wall -o paplay_8c paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
 
 // PA_DIR=/home/pi/pulseaudio
 
@@ -44,6 +45,9 @@
 
 #include <pulse/pulseaudio.h>
 #include <pulsecore/i18n.h>
+
+// gcc -ggdb -Wall -o paplay_8c paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
+// pulseaudio -D --system 
 
 // 這溪東西要看configure之後出來的config.h
 #define  GETTEXT_PACKAGE "pulseaudio"
@@ -395,7 +399,10 @@ int main(int argc, char *argv[]) {
     }
 
     mainloop_api = pa_mainloop_get_api(m);
-
+	/*** ***/
+	goto quit;
+	
+	
     r = pa_signal_init(mainloop_api);
     assert(r == 0);
     pa_signal_new(SIGINT, exit_signal_callback, NULL);
