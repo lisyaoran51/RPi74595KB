@@ -403,8 +403,7 @@ int main(int argc, char *argv[]) {
 	
 	
     r = pa_signal_init(mainloop_api);
-	/*** ***/
-	goto quit;
+	
 	
     assert(r == 0);
     pa_signal_new(SIGINT, exit_signal_callback, NULL);
@@ -426,6 +425,10 @@ int main(int argc, char *argv[]) {
         goto quit;
     }
 
+	/******/
+	goto quit;
+	
+	
     /* Run the main loop */
     if (pa_mainloop_run(m, &ret) < 0) {
         fprintf(stderr, _("pa_mainloop_run() failed.\n"));
