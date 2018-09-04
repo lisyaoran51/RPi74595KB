@@ -424,7 +424,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, _("pa_context_connect() failed: %s"), pa_strerror(pa_context_errno(context)));
         goto quit;
     }
-
+	goto quit;
 	for(int i = 0; i < 500; i++){
 		printf("-");
 	}
