@@ -20,6 +20,8 @@
   USA.
 ***/
 
+#define  GETTEXT_PACKAGE pulseaudio
+
 // gcc -ggdb -Wall -o paplay_8c paplay_8c.c -I/home/pi/pulseaudio -I/home/pi/pulseaudio/src -L/usr/lib/pulseaudio -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpulsecore-12.0 -lpulsecommon-12.0
 
 // PA_DIR=/home/pi/pulseaudio
