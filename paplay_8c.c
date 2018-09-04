@@ -425,22 +425,15 @@ int main(int argc, char *argv[]) {
         goto quit;
     }
 
-	
+	for(int i = 0; i < 500; i++){
+		printf("-");
+	}
     /* Run the main loop */
     if (pa_mainloop_run(m, &ret) < 0) {
         fprintf(stderr, _("pa_mainloop_run() failed.\n"));
         goto quit;
     }
 	
-	for(int i = 0; i < 500; i++){
-		printf("-");
-	}
-	
-	if (pa_mainloop_run(m, &ret) < 0) {
-        fprintf(stderr, _("pa_mainloop_run() failed.\n"));
-        goto quit;
-    }
-
 quit:
     if (stream)
         pa_stream_unref(stream);
