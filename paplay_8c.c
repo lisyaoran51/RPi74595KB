@@ -20,7 +20,7 @@
   USA.
 ***/
 
-#define  GETTEXT_PACKAGE "pulseaudio"
+
 
 // gcc -ggdb -Wall -o paplay_8c paplay_8c.c -I/home/pi/pulseaudio -I/home/pi/pulseaudio/src -L/usr/lib/pulseaudio -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpulsecore-12.0 -lpulsecommon-12.0
 
@@ -44,6 +44,10 @@
 
 #include <pulse/pulseaudio.h>
 #include <pulsecore/i18n.h>
+
+// 這溪東西要看configure之後出來的config.h
+#define  GETTEXT_PACKAGE "pulseaudio"
+#define  PACKAGE_VERSION "12.0-108-g3e36"
 
 static pa_context *context = NULL;
 static pa_stream *stream = NULL;
