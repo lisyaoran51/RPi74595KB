@@ -20,6 +20,9 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Pipe Error：%s\n\a", strerror(errno));  
         exit(1);  
     }  
+	
+	printf("fd[0]:%d , fd[1]:%d\n", fd[0], fd[1]);
+	
     if (fork() == 0) {  
         close(fd[0]);  
         printf("Child[%d] Write to pipe\n\a", getpid());  
