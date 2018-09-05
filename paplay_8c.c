@@ -770,10 +770,10 @@ int amain(int argc, char *argv[]) {
 	//}
 	//printf("aaaaaaaaaaaaaa\n");
     /* Run the main loop */
-    if (my_pa_mainloop_run(m, &ret) < 0) {
-        fprintf(stderr, _("pa_mainloop_run() failed.\n"));
-        goto quit;
-    }
+    //if (my_pa_mainloop_run(m, &ret) < 0) {
+    //    fprintf(stderr, _("pa_mainloop_run() failed.\n"));
+    //    goto quit;
+    //}
 	
 quit:
     if (stream)
