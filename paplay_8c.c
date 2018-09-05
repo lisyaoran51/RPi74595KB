@@ -394,7 +394,7 @@ int main(int argc, char *argv[]){
 		}
 		printf("time's up. Play song...\n");
 		called = true;
-		char buffer[] = "1";
+		char buffer[] = "ababababababa";
 		write(pfd[1], buffer, strlen(buffer));  
 		printf("exit parent\n");
 		usleep(10000000);
@@ -405,7 +405,7 @@ int main(int argc, char *argv[]){
 				"My pid :%d, parent pid:%d\n",
 				getpid(), getppid());
 		int r;
-		char buffer[2];
+		char buffer[20];
 		int bytes;
 		
 		printf("start receiving...\n");
