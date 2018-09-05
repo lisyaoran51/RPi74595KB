@@ -408,6 +408,7 @@ int main(int argc, char *argv[]){
 		char buffer[2];
 		int bytes;
 		
+		printf("start receiving...\n");
 		bytes = read(pfd[0], buffer, sizeof(buffer))
 		printf("received % bytes : %s \n", bytes, buffer);
 		
