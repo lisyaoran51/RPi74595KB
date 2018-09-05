@@ -402,7 +402,12 @@ int main(int argc, char *argv[]){
 		printf("time's up. Play song...\n");
 		write(fd[1], buffer, strlen(buffer));  
 		printf("child send done...\n");
-		for(int i = 0; i < 1000; i++) printf(" ");
+		
+		for(int i = 0; i < 1000; i++) {
+			printf(" ");
+			usleep(10000);
+		}
+		
 		printf("exit parent\n");
 		
         exit(0);  
