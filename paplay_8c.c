@@ -472,15 +472,23 @@ int my_pa_mainloop_run(pa_mainloop *m, int *retval) {
     while ((r = pa_mainloop_iterate(m, 1, retval)) >= 0){
 		
 		if(firstRun < 7){
+			
 			printf("%d", firstRun);
-			usleep(100000);
+			
+			if(firstRun > 1)
+				usleep(100000);
+			
 			firstRun++;
+		
 		} else if(firstRun == 8){
+			
 			firstRun++;
+			
 			for(int i = 0; i < 5; i++){
 				printf("-");
 				usleep(100);
 			}
+			
 			printf("aaaaaaaaaaaaaa\n");
 		}
 	}
