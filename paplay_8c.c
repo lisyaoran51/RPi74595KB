@@ -482,9 +482,8 @@ int my_pa_mainloop_run(pa_mainloop *m, int *retval) {
 			printf("%d", firstRun);
 			
 			if(firstRun > 5)
-				usleep(1000000);
+				usleep(10000000);
 			
-			firstRun++;
 		
 		} else if(firstRun == 9){
 			
