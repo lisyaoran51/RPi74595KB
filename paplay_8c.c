@@ -432,10 +432,10 @@ int main(int argc, char *argv[]){
 			}
 			
 			if(!called){
-				
+				char buffer2[256];  
 				printf("parent waiting start..\n");
-				bytes = read(fd[0], buffer, 255); 
-				printf("received % bytes : %s \n", bytes, buffer);
+				bytes = read(fd[0], buffer2, 255); 
+				printf("received % bytes : %s \n", bytes, buffer2);
 				if(bytes)
 					called = true;
 				
