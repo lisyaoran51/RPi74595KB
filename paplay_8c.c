@@ -374,7 +374,7 @@ int main(int argc, char *argv[]){
 		
 		
 		
-	/*
+	
 	char buffer[256];  
     int fd[2];  
     if (argc != 2) {  
@@ -391,9 +391,20 @@ int main(int argc, char *argv[]){
     if (fork() == 0) {  
         close(fd[0]);  
         printf("Child[%d] Write to pipe\n\a", getpid());  
-        snprintf(buffer, 255, "%s", argv[1]);  
+        snprintf(buffer, 255, "%s", "-plz start-");  
         write(fd[1], buffer, strlen(buffer));  
-        printf("Child[%d] Quit\n\a", getpid());  
+        // printf("Child[%d] Quit\n\a", getpid()); 
+		
+		for(int i = 0; i < 5; i++){
+			printf("counting...%d\n", i);
+			usleep(1000000);
+		}
+		printf("time's up. Play song...\n");
+		write(fd[1], buffer, strlen(buffer));  
+		
+		usleep(10000000);
+		printf("exit parent\n");
+		
         exit(0);  
     } else {  
         close(fd[1]);  
@@ -401,9 +412,28 @@ int main(int argc, char *argv[]){
         memset(buffer, '\0', 256);  
         read(fd[0], buffer, 255);  
         printf("Parent[%d] Read：%s\n", getpid(), buffer);  
+		
+		int bytes;
+		bool called = false;
+		
+		printf("start receiving...\n");
+		
+		while ((pa_mainloop_iterate(m, 1, &ret)) >= 0){
+			while(!called){
+				
+				bytes = read(fd[0], buffer, 255); 
+				printf("received % bytes : %s \n", bytes, buffer);
+				if(bytes)
+					called = true;
+				
+				usleep(100000);printf("waiting..\n");
+				
+			}
+		}
+		
         exit(1);  
     }  
-	*/
+	
 	
 	
 	//------------------------------
@@ -437,8 +467,7 @@ int main(int argc, char *argv[]){
 		write(pfd[1], buffer, strlen(buffer));  
 		write(pfd[1], buffer, strlen(buffer)); 
 		write(pfd[1], buffer, strlen(buffer)); 
-		printf("exit parent\n");
-		usleep(10000000);
+		
 	}
 	else{
 		//in child process
