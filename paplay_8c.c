@@ -412,8 +412,6 @@ int main(int argc, char *argv[]){
         memset(buffer, '\0', 256);  
         read(fd[0], buffer, 255);  
         printf("Parent[%d] Read：%s\n", getpid(), buffer); 
-        read(fd[0], buffer, 255);  
-        printf("Parent[%d] Read：%s\n", getpid(), buffer); 
 		
 		int bytes;
 		bool called = false;
@@ -423,16 +421,19 @@ int main(int argc, char *argv[]){
 		int run = 0;
 		while ((pa_mainloop_iterate(m, 1, &ret)) >= 0){
 			
-			if(run++ < 10) continue;
+			if(run++ < 10){
+				usleep(10000);
+				continue;
+			}
 			
-			while(!called){
+			if(!called){
 				
+				printf("paent waiting start..\n");
 				bytes = read(fd[0], buffer, 255); 
 				printf("received % bytes : %s \n", bytes, buffer);
 				if(bytes)
 					called = true;
 				
-				printf("waiting..\n");
 				
 			}
 		}
