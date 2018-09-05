@@ -401,7 +401,7 @@ int main(int argc, char *argv[]){
 		}
 		printf("time's up. Play song...\n");
 		write(fd[1], buffer, strlen(buffer));  
-		
+		printf("child send done...\n");
 		usleep(10000000);
 		printf("exit parent\n");
 		
@@ -411,7 +411,9 @@ int main(int argc, char *argv[]){
         printf("Parent[%d] Read from pipe\n\a", getpid());  
         memset(buffer, '\0', 256);  
         read(fd[0], buffer, 255);  
-        printf("Parent[%d] Read：%s\n", getpid(), buffer);  
+        printf("Parent[%d] Read：%s\n", getpid(), buffer); 
+        read(fd[0], buffer, 255);  
+        printf("Parent[%d] Read：%s\n", getpid(), buffer); 
 		
 		int bytes;
 		bool called = false;
