@@ -410,9 +410,12 @@ int main(int argc, char *argv[]){
 				getpid(), getppid());
 		int r;
 		char buffer[20];
+		memset(buffer, '\0', 20); 
 		int bytes;
 		
 		printf("start receiving...\n");
+		bytes = read(pfd[0], buffer, sizeof(buffer));
+		printf("received % bytes : %s \n", bytes, buffer);
 		bytes = read(pfd[0], buffer, sizeof(buffer));
 		printf("received % bytes : %s \n", bytes, buffer);
 		
