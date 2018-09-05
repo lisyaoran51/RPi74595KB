@@ -409,10 +409,11 @@ int main(int argc, char *argv[]){
 		int bytes;
 		while ((r = pa_mainloop_iterate(m, 1, &ret)) >= 0){
 			while(!called){
-				while(bytes = read(pfd[0], buffer, sizeof(buffer))){
-					printf("received % bytes : %s \n", bytes, buffer);
-					called = true;
-				}
+				bytes = read(pfd[0], buffer, sizeof(buffer))
+				printf("received % bytes : %s \n", bytes, buffer);
+				//if(bytes)
+				//	called = true;
+				
 				usleep(100000);printf("waiting..\n");
 			}
 		}
