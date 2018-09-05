@@ -388,7 +388,7 @@ int main(int argc, char *argv[]){
 		// pid != 0, in parent process
 		printf("in parent child pid:%d\n", pid);
 		
-		for(int i = 0; i < 30; i++){
+		for(int i = 0; i < 5; i++){
 			printf("counting...%d\n", i);
 			usleep(1000000);
 		}
@@ -396,7 +396,8 @@ int main(int argc, char *argv[]){
 		called = true;
 		char buffer[] = "1";
 		write(pfd[1], buffer, strlen(buffer));  
-		
+		printf("exit parent\n");
+		usleep(10000000);
 	}
 	else{
 		//in child process
@@ -412,7 +413,7 @@ int main(int argc, char *argv[]){
 					printf("received % bytes : %s \n", bytes, buffer);
 					called = true;
 				}
-				usleep(100);
+				usleep(100000);printf("waiting..\n");
 			}
 		}
 		return 0;
