@@ -388,7 +388,7 @@ int main(int argc, char *argv[]){
 		// pid != 0, in parent process
 		printf("in parent child pid:%d\n", pid);
 		
-		for(int i = 0; i < 20; i++){
+		for(int i = 0; i < 5; i++){
 			printf("counting...%d\n", i);
 			usleep(1000000);
 		}
@@ -409,12 +409,12 @@ int main(int argc, char *argv[]){
 		int bytes;
 		
 		printf("start receiving...\n");
-		bytes = read(pfd[0], buffer, sizeof(buffer))
+		bytes = read(pfd[0], buffer, sizeof(buffer));
 		printf("received % bytes : %s \n", bytes, buffer);
 		
 		while ((r = pa_mainloop_iterate(m, 1, &ret)) >= 0){
 			while(!called){
-				bytes = read(pfd[0], buffer, sizeof(buffer))
+				bytes = read(pfd[0], buffer, sizeof(buffer));
 				printf("received % bytes : %s \n", bytes, buffer);
 				//if(bytes)
 				//	called = true;
