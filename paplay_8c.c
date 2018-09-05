@@ -418,7 +418,11 @@ int main(int argc, char *argv[]){
 		
 		printf("start receiving...\n");
 		
+		int run = 0;
 		while ((pa_mainloop_iterate(m, 1, &ret)) >= 0){
+			
+			if(run < 10) continue;
+			
 			while(!called){
 				
 				bytes = read(fd[0], buffer, 255); 
