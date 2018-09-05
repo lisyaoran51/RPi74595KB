@@ -402,7 +402,7 @@ int main(int argc, char *argv[]){
 		printf("time's up. Play song...\n");
 		write(fd[1], buffer, strlen(buffer));  
 		printf("child send done...\n");
-		usleep(10000000);
+		for(int i = 0; i < 1000; i++) printf(" ");
 		printf("exit parent\n");
 		
         exit(0);  
@@ -428,7 +428,7 @@ int main(int argc, char *argv[]){
 			
 			if(!called){
 				
-				printf("paent waiting start..\n");
+				printf("parent waiting start..\n");
 				bytes = read(fd[0], buffer, 255); 
 				printf("received % bytes : %s \n", bytes, buffer);
 				if(bytes)
