@@ -48,9 +48,11 @@
 #include <pulsecore/i18n.h>
 #include <pulse/mainloop.h>
 
+
+#include <pthread.h>
 //#include "paplay_8c.h"
 
-// gcc -ggdb -Wall -o paplay_8c3 paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
+// gcc -ggdb -Wall -o paplay_8c3 paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpthread
 // gcc -ggdb -Wall -o paplay_8c paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
 // pulseaudio -D --system 
 
@@ -76,6 +78,8 @@ static int channel_map_set = 0;
 static sf_count_t (*readf_function)(SNDFILE *_sndfile, void *ptr, sf_count_t frames) = NULL;
 
 int my_pa_mainloop_run(pa_mainloop *m, int *retval);
+
+static bool startPlay = false;
 
 
 /* A shortcut for terminating the application */
@@ -371,9 +375,28 @@ int main(int argc, char *argv[]){
         fprintf(stderr, _("pa_context_connect() failed: %s"), pa_strerror(pa_context_errno(context)));
         goto quit;
     }
+	
+	//*************************************************************
+	//*************************************************************
+	//*************************************************************
+	
+	pthread_t t;
 		
-		
-		
+	printf("pa thread start\n");
+	if(pthread_create( &t, NULL, my_pa_mainloop_run, m ) < 0)
+		printf("fail!!\n");
+	
+	for(int i = 0; i < 5; i++){
+		printf("counting...%d\n", i);
+		usleep(1000000);
+	}
+	printf("time's up. Play song...\n");
+	startPlay = true;
+	
+	//*************************************************************
+	//*************************************************************
+	//*************************************************************
+	goto quit;	
 	
 	char buffer[256];  
     int fd[2];  
@@ -445,6 +468,7 @@ int main(int argc, char *argv[]){
 		
         exit(1);  
     }  
+	
 	
 	
 	
@@ -774,35 +798,21 @@ quit:
     return ret;
 }
 
-int my_pa_mainloop_run(pa_mainloop *m, int *retval) {
+int my_pa_mainloop_run(pa_mainloop *m) {
     int r;
+	int retval;
+	int run = 0;
 	
-	int firstRun = 0;
-	
-	usleep(1000000);
-	printf("baaaaaaaaaaaa\n");usleep(1000000);
-	printf("baaaaaaaaaaaa\n");usleep(1000000);
-	printf("baaaaaaaaaaaa\n");
-	
-    while ((r = pa_mainloop_iterate(m, 1, retval)) >= 0){
-		firstRun++;
-		if(firstRun == 10){
-			
-			usleep(1000000);
-		
-			for(int i = 0; i < 500; i++){
-				printf("-");
-				usleep(100);
-			}
-			usleep(1000000);
-			printf("aaaaaaaaaaaaaa\n");
-			
+    while ((r = pa_mainloop_iterate(m, 1, &retval)) >= 0){
+		if(run++ < 10){
+			usleep(10000);
+			continue;
 		}
 		
-		
+		while(!startPlay)
+			usleep(1000);;
 	}
-		
-
+	
     if (r == -2)
         return 1;
     else
