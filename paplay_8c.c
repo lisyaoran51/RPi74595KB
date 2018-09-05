@@ -421,7 +421,7 @@ int main(int argc, char *argv[]){
 		int run = 0;
 		while ((pa_mainloop_iterate(m, 1, &ret)) >= 0){
 			
-			if(run < 10) continue;
+			if(run++ < 10) continue;
 			
 			while(!called){
 				
