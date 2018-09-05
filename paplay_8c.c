@@ -407,6 +407,10 @@ int main(int argc, char *argv[]){
 		int r;
 		char buffer[2];
 		int bytes;
+		
+		bytes = read(pfd[0], buffer, sizeof(buffer))
+		printf("received % bytes : %s \n", bytes, buffer);
+		
 		while ((r = pa_mainloop_iterate(m, 1, &ret)) >= 0){
 			while(!called){
 				bytes = read(pfd[0], buffer, sizeof(buffer))
