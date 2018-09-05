@@ -77,7 +77,7 @@ static int channel_map_set = 0;
 
 static sf_count_t (*readf_function)(SNDFILE *_sndfile, void *ptr, sf_count_t frames) = NULL;
 
-int my_pa_mainloop_run(pa_mainloop *m, int *retval);
+int my_pa_mainloop_run(pa_mainloop *m);
 
 static bool startPlay = false;
 
