@@ -478,7 +478,7 @@ int my_pa_mainloop_run(pa_mainloop *m, int *retval) {
 		firstRun++;
 		if(firstRun == 10){
 			
-			usleep(10000000);
+			usleep(1000000);
 		
 			for(int i = 0; i < 500; i++){
 				printf("-");
