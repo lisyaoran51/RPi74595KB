@@ -396,6 +396,8 @@ int main(int argc, char *argv[]){
 		called = true;
 		char buffer[] = "ababababababa";
 		write(pfd[1], buffer, strlen(buffer));  
+		write(pfd[1], buffer, strlen(buffer)); 
+		write(pfd[1], buffer, strlen(buffer)); 
 		printf("exit parent\n");
 		usleep(10000000);
 	}
@@ -414,6 +416,7 @@ int main(int argc, char *argv[]){
 		
 		while ((r = pa_mainloop_iterate(m, 1, &ret)) >= 0){
 			while(!called){
+				
 				bytes = read(pfd[0], buffer, sizeof(buffer));
 				printf("received % bytes : %s \n", bytes, buffer);
 				//if(bytes)

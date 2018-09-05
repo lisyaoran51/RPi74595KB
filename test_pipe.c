@@ -7,6 +7,8 @@
 #include <sys/wait.h>  
 #define BUFFER 255  
   
+  // gcc  -Wall -o test_pipe test_pipe.c 
+  
 int main(int argc, char **argv) {  
     char buffer[BUFFER + 1];  
     int fd[2];  
