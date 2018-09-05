@@ -378,6 +378,8 @@ int main(int argc, char *argv[]){
 	if (pipe(pfd)<0)
         return -1;
 	
+	printf("pfd[0]:%d , pfd[1]:%d\n", pfd[0], pfd[1]);
+	
 	bool called = false;
 	
 	//------------------------------
