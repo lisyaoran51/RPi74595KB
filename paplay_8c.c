@@ -471,6 +471,7 @@ int my_pa_mainloop_run(pa_mainloop *m, int *retval) {
 	
     while ((r = pa_mainloop_iterate(m, 1, retval)) >= 0){
 		if(firstRun < 8){
+			printf("%d", firstRun);
 			firstRun++;
 		} else if(firstRun == 8){
 			firstRun++;
