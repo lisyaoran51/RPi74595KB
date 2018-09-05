@@ -48,6 +48,7 @@
 #include <pulsecore/i18n.h>
 #include <pulse/mainloop.h>
 
+// gcc -ggdb -Wall -o paplay_8c3 paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
 // gcc -ggdb -Wall -o paplay_8c paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
 // pulseaudio -D --system 
 
@@ -488,6 +489,7 @@ int my_pa_mainloop_run(pa_mainloop *m, int *retval) {
         return -1;
 }
 
+/***
 int my_pa_mainloop_iterate(pa_mainloop *m, int block, int *retval) {
     int r;
     pa_assert(m);
@@ -509,3 +511,4 @@ quit:
         *retval = pa_mainloop_get_retval(m);
     return r;
 }
+***/
