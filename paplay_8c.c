@@ -426,7 +426,7 @@ int main(int argc, char *argv[]){
 				if(bytes)
 					called = true;
 				
-				usleep(100000);printf("waiting..\n");
+				printf("waiting..\n");
 				
 			}
 		}
