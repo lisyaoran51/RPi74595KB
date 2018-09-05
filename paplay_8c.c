@@ -469,9 +469,9 @@ int my_pa_mainloop_run(pa_mainloop *m, int *retval) {
 	int firstRun = 0;
 	
     while ((r = pa_mainloop_iterate(m, 1, retval)) >= 0){
-		if(firstRun < 10){
+		if(firstRun < 2){
 			firstRun++;
-		} else if(firstRun == 10){
+		} else if(firstRun == 2){
 			firstRun++;
 			for(int i = 0; i < 5000; i++){
 				printf("-");
@@ -486,4 +486,26 @@ int my_pa_mainloop_run(pa_mainloop *m, int *retval) {
         return 1;
     else
         return -1;
+}
+
+int my_pa_mainloop_iterate(pa_mainloop *m, int block, int *retval) {
+    int r;
+    pa_assert(m);
+
+    if ((r = pa_mainloop_prepare(m, block ? -1 : 0)) < 0)
+        goto quit;
+
+    if ((r = pa_mainloop_poll(m)) < 0)
+        goto quit;
+
+    if ((r = pa_mainloop_dispatch(m)) < 0)
+        goto quit;
+
+    return r;
+
+quit:
+
+    if ((r == -2) && retval)
+        *retval = pa_mainloop_get_retval(m);
+    return r;
 }
