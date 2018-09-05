@@ -48,7 +48,7 @@
 #include <pulsecore/i18n.h>
 #include <pulse/mainloop.h>
 
-#include "paplay_8c.h"
+//#include "paplay_8c.h"
 
 // gcc -ggdb -Wall -o paplay_8c3 paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
 // gcc -ggdb -Wall -o paplay_8c paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
