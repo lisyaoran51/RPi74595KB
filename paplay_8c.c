@@ -470,7 +470,7 @@ int my_pa_mainloop_run(pa_mainloop *m, int *retval) {
 	int firstRun = 0;
 	
     while ((r = pa_mainloop_iterate(m, 1, retval)) >= 0){
-		if(firstRun < 2){
+		if(firstRun < 5){
 			firstRun++;
 		} else if(firstRun == 2){
 			firstRun++;
