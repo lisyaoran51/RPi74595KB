@@ -239,34 +239,7 @@ enum {
 
 int main(int argc, char *argv[]){
 	
-	char buffer[256];  
-    int fd[2];  
-    if (argc != 2) {  
-        fprintf(stderr, "Usage：%s string\n\a", argv[0]);  
-        exit(1);  
-    }  
-    if (pipe(fd) != 0) {  
-        fprintf(stderr, "Pipe Error：%s\n\a", strerror(errno));  
-        exit(1);  
-    }  
 	
-	printf("fd[0]:%d , fd[1]:%d\n", fd[0], fd[1]);
-	
-    if (fork() == 0) {  
-        close(fd[0]);  
-        printf("Child[%d] Write to pipe\n\a", getpid());  
-        snprintf(buffer, 255, "%s", argv[1]);  
-        write(fd[1], buffer, strlen(buffer));  
-        printf("Child[%d] Quit\n\a", getpid());  
-        exit(0);  
-    } else {  
-        close(fd[1]);  
-        printf("Parent[%d] Read from pipe\n\a", getpid());  
-        memset(buffer, '\0', 256);  
-        read(fd[0], buffer, 255);  
-        printf("Parent[%d] Read：%s\n", getpid(), buffer);  
-        exit(1);  
-    }  
 	
 	
 	pa_mainloop* m = NULL;
@@ -398,12 +371,43 @@ int main(int argc, char *argv[]){
         fprintf(stderr, _("pa_context_connect() failed: %s"), pa_strerror(pa_context_errno(context)));
         goto quit;
     }
+		
+		
+		
+		
+	char buffer[256];  
+    int fd[2];  
+    if (argc != 2) {  
+        fprintf(stderr, "Usage：%s string\n\a", argv[0]);  
+        exit(1);  
+    }  
+    if (pipe(fd) != 0) {  
+        fprintf(stderr, "Pipe Error：%s\n\a", strerror(errno));  
+        exit(1);  
+    }  
 	
+	printf("fd[0]:%d , fd[1]:%d\n", fd[0], fd[1]);
+	
+    if (fork() == 0) {  
+        close(fd[0]);  
+        printf("Child[%d] Write to pipe\n\a", getpid());  
+        snprintf(buffer, 255, "%s", argv[1]);  
+        write(fd[1], buffer, strlen(buffer));  
+        printf("Child[%d] Quit\n\a", getpid());  
+        exit(0);  
+    } else {  
+        close(fd[1]);  
+        printf("Parent[%d] Read from pipe\n\a", getpid());  
+        memset(buffer, '\0', 256);  
+        read(fd[0], buffer, 255);  
+        printf("Parent[%d] Read：%s\n", getpid(), buffer);  
+        exit(1);  
+    }  
 	
 	//------------------------------
 	// https://blog.csdn.net/victoryckl/article/details/17335661
 	// https://www.cnblogs.com/kunhu/p/3608109.html
-	
+
 	int pfd[2];
 	if (pipe(pfd)<0)
         return -1;
