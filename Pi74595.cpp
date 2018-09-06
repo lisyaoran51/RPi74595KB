@@ -203,7 +203,7 @@ void SetPA(int key){
 	const char* part3 = "_083.wav";
 	sprintf(part3, "%d", pitch+21-9);
 
-	char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3)); /* make space for the new string (should check the return value ...) */
+	char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
 	strcpy(path, part1); /* copy name into the new var */
 	strcat(path, part2); /* add the extension */
 	strcat(path, part3); /* add the extension */
