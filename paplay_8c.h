@@ -5,7 +5,7 @@
 static bool startPlay[100];
 
 int PlayPaSound(int pitch);
-int SetSound(int pitch, char *argv);
+int SetSound(int pitch, char* argv);
 
 
 typedef struct {
