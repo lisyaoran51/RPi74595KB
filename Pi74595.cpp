@@ -183,7 +183,7 @@ void SetPA(int key){
 	
 	int pitch = key;
 	printf("Start Program2\n");
-	pitch += 24;
+	//pitch += 24;
 	
 	printf("Setting PA");
 	
