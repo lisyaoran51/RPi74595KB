@@ -241,7 +241,7 @@ enum {
     ARG_CHANNELMAP
 };
 
-int main(int argc, char *argv[]){
+int mymain(char *argv){
 	
 	
 	
@@ -269,7 +269,7 @@ int main(int argc, char *argv[]){
     bindtextdomain(GETTEXT_PACKAGE, PULSE_LOCALEDIR);
 
 
-    filename = "thwap.wav";
+    filename = argv;
 
     memset(&sfinfo, 0, sizeof(sfinfo));
 
@@ -285,31 +285,32 @@ int main(int argc, char *argv[]){
 	
 	printf("rate: %d , channels: %d\n", sample_spec.rate, sample_spec.channels);
 
-    readf_function = NULL;
+    if(readf_function == NULL){
 
-    switch (sfinfo.format & 0xFF) {
-        case SF_FORMAT_PCM_16:
-        case SF_FORMAT_PCM_U8:
-        case SF_FORMAT_PCM_S8:
-            sample_spec.format = PA_SAMPLE_S16NE;
-            readf_function = (sf_count_t (*)(SNDFILE *_sndfile, void *ptr, sf_count_t frames)) sf_readf_short;
-            break;
+		switch (sfinfo.format & 0xFF) {
+			case SF_FORMAT_PCM_16:
+			case SF_FORMAT_PCM_U8:
+			case SF_FORMAT_PCM_S8:
+				sample_spec.format = PA_SAMPLE_S16NE;
+				readf_function = (sf_count_t (*)(SNDFILE *_sndfile, void *ptr, sf_count_t frames)) sf_readf_short;
+				break;
 
-        case SF_FORMAT_ULAW:
-            sample_spec.format = PA_SAMPLE_ULAW;
-            break;
+			case SF_FORMAT_ULAW:
+				sample_spec.format = PA_SAMPLE_ULAW;
+				break;
 
-        case SF_FORMAT_ALAW:
-            sample_spec.format = PA_SAMPLE_ALAW;
-            break;
+			case SF_FORMAT_ALAW:
+				sample_spec.format = PA_SAMPLE_ALAW;
+				break;
 
-        case SF_FORMAT_FLOAT:
-        case SF_FORMAT_DOUBLE:
-        default:
-            sample_spec.format = PA_SAMPLE_FLOAT32NE;
-            readf_function = (sf_count_t (*)(SNDFILE *_sndfile, void *ptr, sf_count_t frames)) sf_readf_float;
-            break;
-    }
+			case SF_FORMAT_FLOAT:
+			case SF_FORMAT_DOUBLE:
+			default:
+				sample_spec.format = PA_SAMPLE_FLOAT32NE;
+				readf_function = (sf_count_t (*)(SNDFILE *_sndfile, void *ptr, sf_count_t frames)) sf_readf_float;
+				break;
+		}
+	}
 
     assert(pa_sample_spec_valid(&sample_spec));
 
@@ -398,142 +399,9 @@ int main(int argc, char *argv[]){
 	//*************************************************************
 	goto quit;	
 	
-	char buffer[256];  
-    int fd[2];  
-    if (argc != 2) {  
-        fprintf(stderr, "Usage：%s string\n\a", argv[0]);  
-        exit(1);  
-    }  
-    if (pipe(fd) != 0) {  
-        fprintf(stderr, "Pipe Error：%s\n\a", strerror(errno));  
-        exit(1);  
-    }  
-	
-	printf("fd[0]:%d , fd[1]:%d\n", fd[0], fd[1]);
-	
-    if (fork() == 0) {  
-        close(fd[0]);  
-        printf("Child[%d] Write to pipe\n\a", getpid());  
-        snprintf(buffer, 255, "%s", "-plz start-");  
-        write(fd[1], buffer, strlen(buffer));  
-        // printf("Child[%d] Quit\n\a", getpid()); 
-		
-		for(int i = 0; i < 5; i++){
-			printf("counting...%d\n", i);
-			usleep(1000000);
-		}
-		printf("time's up. Play song...\n");
-		write(fd[1], buffer, strlen(buffer));  
-		printf("child send done...\n");
-		
-		for(int i = 0; i < 1000; i++) {
-			printf(" ");
-			usleep(10000);
-		}
-		
-		printf("exit parent\n");
-		
-        exit(0);  
-    } else {  
-        close(fd[1]);  
-        printf("Parent[%d] Read from pipe\n\a", getpid());  
-        memset(buffer, '\0', 256);  
-        read(fd[0], buffer, 255);  
-        printf("Parent[%d] Read：%s\n", getpid(), buffer); 
-		
-		int bytes;
-		bool called = false;
-		
-		printf("start receiving...\n");
-		
-		int run = 0;
-		while ((pa_mainloop_iterate(m, 1, &ret)) >= 0){
-			
-			if(run++ < 10){
-				usleep(10000);
-				continue;
-			}
-			
-			if(!called){
-				char buffer2[256];  
-				printf("parent waiting start..\n");
-				//bytes = read(fd[0], buffer2, 255); 
-				//printf("received % bytes : %s \n", bytes, buffer2);
-				//if(bytes)
-				//	called = true;
-				
-				
-			}
-		}
-		
-        exit(1);  
-    }  
 	
 	
 	
-	
-	//------------------------------
-	// https://blog.csdn.net/victoryckl/article/details/17335661
-	// https://www.cnblogs.com/kunhu/p/3608109.html
-
-	int pfd[2];
-	if (pipe(pfd)<0)
-        return -1;
-	
-	printf("pfd[0]:%d , pfd[1]:%d\n", pfd[0], pfd[1]);
-	
-	bool called = false;
-	
-	//------------------------------
-	
-	pid_t pid;
-	printf("parent pid:%d\n", getpid());
-	if(pid = fork()) {
-		// pid != 0, in parent process
-		printf("in parent child pid:%d\n", pid);
-		
-		close(pfd[0]);
-		for(int i = 0; i < 5; i++){
-			printf("counting...%d\n", i);
-			usleep(1000000);
-		}
-		printf("time's up. Play song...\n");
-		called = true;
-		char buffer[] = "ababababababa";
-		write(pfd[1], buffer, strlen(buffer));  
-		write(pfd[1], buffer, strlen(buffer)); 
-		write(pfd[1], buffer, strlen(buffer)); 
-		
-	}
-	else{
-		//in child process
-		printf("I\'m Child process.\n"
-				"My pid :%d, parent pid:%d\n",
-				getpid(), getppid());
-		int r;
-		char buffer[20]; 
-		int bytes;
-		
-		close(pfd[1]);  
-		printf("start receiving...\n");
-		bytes = read(pfd[0], buffer, sizeof(buffer));
-		printf("received % bytes : %s \n", bytes, buffer);
-		bytes = read(pfd[0], buffer, sizeof(buffer));
-		printf("received % bytes : %s \n", bytes, buffer);
-		
-		while ((r = pa_mainloop_iterate(m, 1, &ret)) >= 0){
-			while(!called){
-				
-				bytes = read(pfd[0], buffer, sizeof(buffer));
-				printf("received % bytes : %s \n", bytes, buffer);
-				//if(bytes)
-				//	called = true;
-				
-				usleep(100000);printf("waiting..\n");
-			}
-		}
-		return 0;
-	}
 	
 	//-----------------------------
 	
@@ -569,7 +437,12 @@ quit:
 	
 }
 
-int amain(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
+	
+	mymain(argv[2]);
+	
+	return 0;
+	
     pa_mainloop* m = NULL;
     int ret = 1, r, c;
     char *bn, *server = NULL;
