@@ -59,6 +59,9 @@ SH_CP
 // g++ Pi74595.cpp -c -o Pi74595.o -lbcm2835 -pthread -fpermissive
 // g++ Pi74595.o paplay_8c.o -o Pi74595 -L./ -lbcm2835 -pthread -fpermissive -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
 
+
+// killall Pi74595
+
 // 要先打開pulseaudio
 // pulseaudio -D --system 
 
@@ -130,7 +133,7 @@ int main(int argc, char **argv) {
 	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
 	}
-	for(int i = 0; i < 9; i++) {
+	for(int i = 0; i < 48; i++) {
 		if(!(pid[i] = SetPA(i)))
 			return 0;
 	}
