@@ -87,7 +87,7 @@ void PlayPA(int key);
 
   
 int main(int argc, char **argv) {
-	printf("Atart Program\n");
+	
 	// 把thread址標清掉
 	for(int i = 0; i < 48; i++)
 		handler[i] = NULL;
@@ -106,6 +106,8 @@ int main(int argc, char **argv) {
 	//t2.detach();
 	//system("aplay thwap.wav");
 	
+	printf("Start Program1\n");
+	
 	if (!bcm2835_init())return 1;
 	
 	bcm2835_gpio_fsel(DI_PIN, BCM2835_GPIO_FSEL_OUTP);
@@ -116,6 +118,8 @@ int main(int argc, char **argv) {
     bcm2835_gpio_fsel(INPUT_PIN, BCM2835_GPIO_FSEL_INPT);
     // Sets the Pull-up mode for the pin.
     bcm2835_gpio_set_pud(INPUT_PIN, BCM2835_GPIO_PUD_UP);
+	
+	printf("Start Program2\n");
 	
 	bool keyPlaying[48];
 	for(int i = 0; i < 33; i++) {
