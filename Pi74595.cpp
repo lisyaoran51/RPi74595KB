@@ -181,7 +181,7 @@ bool CheckKey(int key){
 void SetPA(int key){
 	
 	
-	int pitch;
+	int pitch = key;
 	printf("Start Program2\n");
 	key + 24;
 	
