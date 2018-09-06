@@ -87,8 +87,7 @@ void PlayPA(int key);
 int main(int argc, char **argv) {
 	
 	// 把thread址標清掉
-	
-	
+	handler = NULL;
 	
 	if (!bcm2835_init())return 1;
 	
