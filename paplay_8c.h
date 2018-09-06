@@ -16,6 +16,8 @@ typedef struct {
 
 #define KEY_SIZE 48
 
+#define BUFFER_SIZE 2048
+
 struct KeyStartSet {
     bool Start[KEY_SIZE];
 };
