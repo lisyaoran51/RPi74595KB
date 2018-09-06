@@ -73,8 +73,6 @@ using namespace std;
 
 pthread_t handler[48];
 
-unsigned char* wavSample[48];
-int wavSize[48];
 
 bool CheckKey(int key);
 
@@ -92,11 +90,6 @@ int main(int argc, char **argv) {
 	for(int i = 0; i < 48; i++)
 		handler[i] = NULL;
 	
-	// 把wav讀進來
-	for(int i = 0; i < 48; i++){
-		
-		
-	}
 	
 	if (!bcm2835_init())return 1;
 	
