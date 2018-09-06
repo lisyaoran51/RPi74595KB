@@ -439,7 +439,7 @@ quit:
 
 int main(int argc, char *argv[]) {
 	
-	mymain(argv[2]);
+	mymain(argv[1]);
 	
 	return 0;
 	
