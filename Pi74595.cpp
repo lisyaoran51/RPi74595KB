@@ -247,6 +247,9 @@ int SetPA(int key){
 int PlayPA(int key){
 	
 	int pitch = key + 24;
+	
+	printf("Pitch [%d] played!!!!\n", pitch);
+	
 	PlayPaSound(pitch);
 	
 	int fpid = fork();  
