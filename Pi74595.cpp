@@ -192,9 +192,9 @@ void SetPA(int key){
 	
 	//string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 	
-	const char* part1 = "Audio/German_Concert_D_0";
-	const char* part2 = "00";
-	const char* part3 = "_083.wav";
+	char* part1 = "Audio/German_Concert_D_0";
+	char* part2 = "00";
+	char* part3 = "_083.wav";
 	
 	sprintf(part2, "%d", ppp+21-9);
 
