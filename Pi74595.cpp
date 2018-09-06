@@ -80,35 +80,8 @@ void Play(int key);
  
 void AplayString(string s, int key);
 
-void SetPA(int key);
-void PlayPA(int key);
-
-
-int doFork(){
-	
-	int fpid = fork();  
-    if (fpid < 0)  
-        printf("error in fork!");  
-    else if (fpid == 0)  {
-        printf("I am the child process, my process id is %d/n", getpid()); 
-		for(int i = 0; i < 10; i++){
-			printf("temp aaaa = %d\n", aaaaa); 
-			aaaaa++;
-			usleep(1000000);
-		}
-	}	
-    else  {
-        printf("I am the parent process, my process id is %d/n", getpid());  
-		for(int i = 0; i < 10; i++){
-			printf("temp aaaa = %d\n", aaaaa); 
-			aaaaa++;
-			usleep(1000000);
-		}
-	}
-    return 0;  
-	
-}
-
+int SetPA(int key);
+int PlayPA(int key);
   
 int main(int argc, char **argv) {
 	
@@ -117,6 +90,8 @@ int main(int argc, char **argv) {
 	
 	for(int i = 0; i < 100; i++)
 		startPlay[i] = false;
+	
+	
 	
 	if (!bcm2835_init())return 1;
 	
@@ -129,17 +104,15 @@ int main(int argc, char **argv) {
     // Sets the Pull-up mode for the pin.
     bcm2835_gpio_set_pud(INPUT_PIN, BCM2835_GPIO_PUD_UP);
 	
-	doFork();
-	printf("Out of function. my process id is %d/n", getpid()); 
+	int pid[48];
 	
 	bool keyPlaying[48];
 	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
 	}
 	for(int i = 0; i < 9; i++) {
-	printf("Start Program1\n");
-		SetPA(i);
-		usleep(1000000);
+		if(!(pid[i] = SetPA(i)))
+			return 0;
 	}
 	
 	bool running = true;
@@ -148,7 +121,8 @@ int main(int argc, char **argv) {
 			if(CheckKey(i)){
 				if(!keyPlaying[i])
 					//Play(i);
-					PlayPA(i);
+					if(!(pid[i] = PlayPA(i)))
+						return 0;
 				
 				keyPlaying[i] = true;
 			}
@@ -159,6 +133,10 @@ int main(int argc, char **argv) {
 	}
 	
 	bcm2835_close();
+	for(int i = 0; i < 48; i++){
+		string s = string("kill ") + to_string(pid[i]);
+		system(s.c_str());
+	}
 	return 0;
 }
 	
@@ -208,54 +186,63 @@ bool CheckKey(int key){
 	
 }
 
-void SetPA(int key){
+int SetPA(int key){
 	
 	
-	int ppp = key + 24;
+	int pitch = key + 24;
 	
-	//printf("Setting PA");
-	
-	//string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
-	
-	char* part1 = "Audio/German_Concert_D_0";
-	char* part2 = malloc(3);;
-	char* part3 = "_083.wav";
-	sprintf(part2, "%ld", ppp+21-9);
+	int fpid = fork();  
+    if (fpid < 0)  
+        printf("error in fork!");  
+    else if (fpid == 0)  {
+        printf("process id %d, Setting my pitch [%d]\n", getpid(), pitch); 
+		
+		char* part1 = "Audio/German_Concert_D_0";
+		char* part2 = malloc(3);
+		char* part3 = "_083.wav";
+		sprintf(part2, "%ld", pitch+21-9);
 
-	char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
-	strcpy(path, part1); /* copy name into the new var */
-	strcat(path, part2); /* add the extension */
-	strcat(path, part3); /* add the extension */
-	
-	thread t(SetSound, ppp, path);
-	
-	printf("Pitch [%d] set. Process number is %d.\n", ppp, t.native_handle());
-	
-	t.detach();
+		char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
+		strcpy(path, part1); /* copy name into the new var */
+		strcat(path, part2); /* add the extension */
+		strcat(path, part3); /* add the extension */
+		
+		SetSound(pitch, path);
+	}	
+    else  {
+        // no-op
+	}
+    return fpid;  
 	
 }
 
-void PlayPA(int key){
+int PlayPA(int key){
 	
 	int pitch = key + 24;
 	PlayPaSound(pitch);
 	
-	string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
-	
-	const char* part1 = "Audio/German_Concert_D_0";
-	const char* part2 = "00";
-	const char* part3 = "_083.wav";
-	sprintf(part3, "%d", pitch+21-9);
+	int fpid = fork();  
+    if (fpid < 0)  
+        printf("error in fork!");  
+    else if (fpid == 0)  {
+        printf("process id %d, Setting my pitch [%d]\n", getpid(), pitch); 
+		
+		char* part1 = "Audio/German_Concert_D_0";
+		char* part2 = malloc(3);
+		char* part3 = "_083.wav";
+		sprintf(part2, "%ld", pitch+21-9);
 
-	char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3)); /* make space for the new string (should check the return value ...) */
-	strcpy(path, part1); /* copy name into the new var */
-	strcat(path, part2); /* add the extension */
-	strcat(path, part3); /* add the extension */
-	
-	thread t(SetSound, pitch, path);
-	printf("KEY [%d] played and reset. Process number is %d.\n", key, t.native_handle());
-	
-	t.detach();
+		char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
+		strcpy(path, part1); /* copy name into the new var */
+		strcat(path, part2); /* add the extension */
+		strcat(path, part3); /* add the extension */
+		
+		SetSound(pitch, path);
+	}	
+    else  {
+        //no-op
+	}
+    return fpid;  
 }
 	
 void Play(int key){

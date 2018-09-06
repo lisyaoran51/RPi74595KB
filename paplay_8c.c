@@ -413,31 +413,6 @@ int SetSound(int pitch, char* argv){
     if (r2 != -2)
 		fprintf(stderr, _("pa_mainloop_iterate() failed.\n"));
 	
-	/* pthread
-	pthread_t t;
-		
-	printf("pa thread start\n");
-	if(pthread_create( &t, NULL, my_pa_mainloop_run, m ) < 0)
-		printf("fail!!\n");
-	
-	for(int i = 0; i < 5; i++){
-		printf("counting...%d\n", i);
-		usleep(1000000);
-	}
-	printf("time's up. Play song...\n");
-	startPlay = true;
-	usleep(10000000);
-	//*************************************************************
-	//*************************************************************
-	//*************************************************************
-	goto quit;	
-	*/
-	
-	
-	
-	
-	//-----------------------------
-	
     /* Run the main loop */
     /***
 	if (my_pa_mainloop_run(m, &ret) < 0) {
