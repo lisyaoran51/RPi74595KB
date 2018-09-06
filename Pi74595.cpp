@@ -118,8 +118,10 @@ int main(int argc, char **argv) {
     bcm2835_gpio_set_pud(INPUT_PIN, BCM2835_GPIO_PUD_UP);
 	
 	bool keyPlaying[48];
-	for(int i = 0; i < 48; i++) {
+	for(int i = 0; i < 33; i++) {
 		keyPlaying[i] = false;
+	}
+	for(int i = 0; i < 9; i++) {
 		SetPA(i);
 	}
 	
