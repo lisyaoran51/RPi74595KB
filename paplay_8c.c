@@ -256,7 +256,10 @@ int PlayPaSound(int pitch){
 	return 0;
 }
 
-int SetSound(int pitch, char *argv){
+int SetSound(PaSoundSet *paSoundSet){
+	
+	int pitch = paSoundSet->pitch;
+	char* argv = paSoundSet->path;
 	
 	pa_mainloop* m = NULL;
     int ret = 1, r, c;

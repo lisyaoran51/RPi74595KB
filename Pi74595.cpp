@@ -199,7 +199,6 @@ void SetPA(int key){
 void PlayPA(int key){
 	
 	int pitch = key + 24;
-	printf("KEY [%d] played and reset. Process number is %d.\n", key, t.native_handle());
 	PlayPaSound(pitch);
 	
 	string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
@@ -209,6 +208,7 @@ void PlayPA(int key){
 	paSoundSet.path = s.c_str();
 	
 	thread t(SetSound, &paSoundSet);
+	printf("KEY [%d] played and reset. Process number is %d.\n", key, t.native_handle());
 	
 	t.detach();
 }
