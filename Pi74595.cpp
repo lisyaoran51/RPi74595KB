@@ -196,6 +196,8 @@ void SetPA(int key){
 	
 	int pitch = key + 24;
 	
+	printf("Setting PA");
+	
 	string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 	
 	const char* part1 = "Audio/German_Concert_D_0";
