@@ -187,6 +187,7 @@ void SetPA(int key){
 	int ppp = key + 24;
 	printf("Start Program4\n");
 	//pitch += 24;
+	printf("Start Program2\n");
 	
 	//printf("Setting PA");
 	
