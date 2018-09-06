@@ -89,6 +89,9 @@ int main(int argc, char **argv) {
 	// 把thread址標清掉
 	handler = NULL;
 	
+	for(int i = 0; i < 100; i++)
+		startPlay[i] = false;
+	
 	if (!bcm2835_init())return 1;
 	
 	bcm2835_gpio_fsel(DI_PIN, BCM2835_GPIO_FSEL_OUTP);
@@ -180,7 +183,9 @@ bool CheckKey(int key){
 void SetPA(int key){
 	
 	
-	
+	printf("Start Program3\n");
+	int ppp = key + 24;
+	printf("Start Program4\n");
 	//pitch += 24;
 	
 	//printf("Setting PA");
@@ -191,8 +196,6 @@ void SetPA(int key){
 	const char* part2 = "00";
 	const char* part3 = "_083.wav";
 	
-	printf("Start Program3\n");
-	int ppp = key + 24;
 	sprintf(part2, "%d", ppp+21-9);
 
 	char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
