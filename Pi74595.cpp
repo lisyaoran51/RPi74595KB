@@ -51,6 +51,8 @@ SH_CP
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
 // g++ Pi74595.cpp -lbcm2835 -pthread
 
+// g++ Pi74595.cpp -lbcm2835 -pthread -fpermissive
+
 // 要先打開pulseaudio
 // pulseaudio -D --system 
 
