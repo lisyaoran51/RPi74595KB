@@ -14,7 +14,7 @@
 #include <string>
 #include <thread>
 
-#inclue "paplay_8c.h"
+#include "paplay_8c.h"
 
 // https://github.com/mignev/shiftpi
 /*
