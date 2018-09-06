@@ -198,7 +198,17 @@ void SetPA(int key){
 	
 	string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 	
-	thread t(SetSound, pitch, (char*)s.c_str());
+	const char* part1 = "Audio/German_Concert_D_0";
+	const char* part2 = "00";
+	const char* part3 = "_083.wav";
+	sprintf(part3, "%d", pitch+21-9);
+
+	char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3)); /* make space for the new string (should check the return value ...) */
+	strcpy(path, part1); /* copy name into the new var */
+	strcat(path, part2); /* add the extension */
+	strcat(path, part3); /* add the extension */
+	
+	thread t(SetSound, pitch, path);
 	
 	printf("Pitch [%d] set. Process number is %d.\n", pitch, t.native_handle());
 	
@@ -213,11 +223,17 @@ void PlayPA(int key){
 	
 	string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 	
-	PaSoundSet paSoundSet;
-	paSoundSet.pitch = pitch;
-	paSoundSet.path = s.c_str();
+	const char* part1 = "Audio/German_Concert_D_0";
+	const char* part2 = "00";
+	const char* part3 = "_083.wav";
+	sprintf(part3, "%d", pitch+21-9);
+
+	char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3)); /* make space for the new string (should check the return value ...) */
+	strcpy(path, part1); /* copy name into the new var */
+	strcat(path, part2); /* add the extension */
+	strcat(path, part3); /* add the extension */
 	
-	thread t(SetSound, pitch, (char*)s.c_str());
+	thread t(SetSound, pitch, path);
 	printf("KEY [%d] played and reset. Process number is %d.\n", key, t.native_handle());
 	
 	t.detach();
