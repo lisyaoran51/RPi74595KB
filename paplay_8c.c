@@ -391,13 +391,13 @@ int SetSound(int pitch, char* argv){
 	//*************************************************************
 	//*************************************************************
 	//*************************************************************
-	int r;
+	int r2;
 	int retval;
 	int run = 0;
 	
 	bool tempPitchStart = false;
 	
-    while ((r = pa_mainloop_iterate(m, 1, &retval)) >= 0){
+    while ((r2 = pa_mainloop_iterate(m, 1, &retval)) >= 0){
 		if(run++ < 10){
 			usleep(10000);
 			continue;
@@ -410,7 +410,7 @@ int SetSound(int pitch, char* argv){
 		startPlay[pitch] = false;
 	}
 	
-    if (r != -2)
+    if (r2 != -2)
 		fprintf(stderr, _("pa_mainloop_iterate() failed.\n"));
 	
 	/* pthread
