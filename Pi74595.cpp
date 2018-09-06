@@ -201,9 +201,9 @@ void SetPA(int key){
 	strcat(path, part2); /* add the extension */
 	strcat(path, part3); /* add the extension */
 	
-	thread t(SetSound, pitch, path);
+	thread t(SetSound, 0, path);
 	
-	printf("Pitch [%d] set. Process number is %d.\n", pitch, t.native_handle());
+	//printf("Pitch [%d] set. Process number is %d.\n", pitch, t.native_handle());
 	
 	t.detach();
 	
