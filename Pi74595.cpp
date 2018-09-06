@@ -196,13 +196,16 @@ void SetPA(int key){
 	char* part2 = "00";
 	char* part3 = "_083.wav";
 	
+	printf("Start Program5\n");
 	sprintf(part2, "%d", ppp+21-9);
 
+	printf("Start Program6\n");
 	char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
 	strcpy(path, part1); /* copy name into the new var */
 	strcat(path, part2); /* add the extension */
 	strcat(path, part3); /* add the extension */
 	
+	printf("Start Program7\n");
 	thread t(SetSound, ppp, path);
 	
 	printf("Pitch [%d] set. Process number is %d.\n", ppp, t.native_handle());
