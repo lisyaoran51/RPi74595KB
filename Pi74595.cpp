@@ -51,8 +51,9 @@ SH_CP
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
 // g++ Pi74595.cpp -lbcm2835 -pthread
 
-// g++ Pi74595.cpp -o Pi74595 paplay_8c.o -lbcm2835 -pthread -fpermissive -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -I
-// gcc -ggdb -Wall -c  paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpthread
+// g++ Pi74595.cpp -c -o Pi74595.o -lbcm2835 -pthread -fpermissive
+// g++ -ggdb -Wall paplay_8c.c -c -o paplay_8c.o -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpthread -fpermissive
+// g++ Pi74595.o paplay_8c.o -o Pi74595 -L./ -lbcm2835 -pthread -fpermissive -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
 
 // 要先打開pulseaudio
 // pulseaudio -D --system 
@@ -112,14 +113,18 @@ int main(int argc, char **argv) {
     bcm2835_gpio_set_pud(INPUT_PIN, BCM2835_GPIO_PUD_UP);
 	
 	bool keyPlaying[48];
-	for(int i = 0; i < 48; i++) keyPlaying[i] = false;
+	for(int i = 0; i < 48; i++) {
+		keyPlaying[i] = false;
+		SetPA(i)
+	}
 	
 	bool running = true;
 	while(running){
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i])
-					Play(i);
+					//Play(i);
+					PlayPA(key);
 				
 				keyPlaying[i] = true;
 			}
