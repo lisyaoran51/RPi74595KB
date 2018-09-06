@@ -51,7 +51,8 @@ SH_CP
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
 // g++ Pi74595.cpp -lbcm2835 -pthread
 
-// g++ Pi74595.cpp -lbcm2835 -pthread -fpermissive
+// g++ Pi74595.cpp -o Pi74595 paplay_8c.o -lbcm2835 -pthread -fpermissive
+// gcc -ggdb -Wall -c  paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpthread
 
 // 要先打開pulseaudio
 // pulseaudio -D --system 
@@ -184,7 +185,7 @@ void SetPA(int key){
 	
 	string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 	
-	thread t(SetSound, pitch, s.c_str());
+	thread t(SetSound, pitch, (char*)s.c_str());
 	
 	printf("Pitch [%d] set. Process number is %d.\n", pitch, t.native_handle());
 	
@@ -203,7 +204,7 @@ void PlayPA(int key){
 	paSoundSet.pitch = pitch;
 	paSoundSet.path = s.c_str();
 	
-	thread t(SetSound, pitch, s.c_str());
+	thread t(SetSound, pitch, (char*)s.c_str());
 	printf("KEY [%d] played and reset. Process number is %d.\n", key, t.native_handle());
 	
 	t.detach();
