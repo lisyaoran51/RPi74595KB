@@ -71,7 +71,7 @@ SH_CP
 
 using namespace std;
 
-pthread_t handler[48];
+pthread_t* handler;
 
 
 bool CheckKey(int key);
