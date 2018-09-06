@@ -120,12 +120,11 @@ int main(int argc, char **argv) {
 	
 	
 	bool keyPlaying[48];
-	printf("Start Program1\n");
 	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
 	}
-	printf("Start Program2\n");
 	for(int i = 0; i < 9; i++) {
+	printf("Start Program1\n");
 		SetPA(i);
 		usleep(1000000);
 	}
