@@ -106,7 +106,6 @@ int main(int argc, char **argv) {
 	//t2.detach();
 	//system("aplay thwap.wav");
 	
-	printf("Start Program1\n");
 	
 	if (!bcm2835_init())return 1;
 	
@@ -119,12 +118,13 @@ int main(int argc, char **argv) {
     // Sets the Pull-up mode for the pin.
     bcm2835_gpio_set_pud(INPUT_PIN, BCM2835_GPIO_PUD_UP);
 	
-	printf("Start Program2\n");
 	
 	bool keyPlaying[48];
-	for(int i = 0; i < 33; i++) {
+	printf("Start Program1\n");
+	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
 	}
+	printf("Start Program2\n");
 	for(int i = 0; i < 9; i++) {
 		SetPA(i);
 		usleep(1000000);
