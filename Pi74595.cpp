@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
 			if(CheckKey(i)){
 				if(!keyPlaying[i])
 					//Play(i);
-					PlayPA(key);
+					PlayPA(i);
 				
 				keyPlaying[i] = true;
 			}
