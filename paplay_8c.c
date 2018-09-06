@@ -249,9 +249,9 @@ int PaplayInit(){
 
 int PlayPaSound(int pitch){
 	
-	startPlay[i] = true;
+	startPlay[pitch] = true;
 	
-	while(startPlay[i]);
+	while(startPlay[pitch]);
 	
 	return 0;
 }
