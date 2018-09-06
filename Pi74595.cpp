@@ -104,6 +104,27 @@ int main(int argc, char **argv) {
     bcm2835_gpio_set_pud(INPUT_PIN, BCM2835_GPIO_PUD_UP);
 	
 	
+	int fpid = fork();  
+    if (fpid < 0)  
+        printf("error in fork!");  
+    else if (fpid == 0)  
+        printf("I am the child process, my process id is %d/n", getpid()); 
+		for(int i = 0; i < 10; i++){
+			printf("temp aaaa = %d\n", aaaaa); 
+			aaaaa++;
+			usleep(1000000);
+		}
+		
+    else  
+        printf("I am the parent process, my process id is %d/n", getpid());  
+		for(int i = 0; i < 10; i++){
+			printf("temp aaaa = %d\n", aaaaa); 
+			aaaaa++;
+			usleep(1000000);
+		}
+    return 0;  
+	
+	
 	bool keyPlaying[48];
 	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
