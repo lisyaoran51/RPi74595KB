@@ -51,8 +51,8 @@ SH_CP
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
 // g++ Pi74595.cpp -lbcm2835 -pthread
 
-// g++ Pi74595.cpp -c -o Pi74595.o -lbcm2835 -pthread -fpermissive
 // g++ -ggdb -Wall paplay_8c.c -c -o paplay_8c.o -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpthread -fpermissive
+// g++ Pi74595.cpp -c -o Pi74595.o -lbcm2835 -pthread -fpermissive
 // g++ Pi74595.o paplay_8c.o -o Pi74595 -L./ -lbcm2835 -pthread -fpermissive -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
 
 // 要先打開pulseaudio
@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
 	bool keyPlaying[48];
 	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
-		SetPA(i)
+		SetPA(i);
 	}
 	
 	bool running = true;
