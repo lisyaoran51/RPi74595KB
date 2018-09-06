@@ -250,7 +250,7 @@ int PlayPA(int key){
 	
 	printf("Pitch [%d] played!!!!\n", pitch);
 	
-	//PlayPaSound(pitch);
+	PlayPaSound(pitch);
 	
 	int fpid = fork();  
     if (fpid < 0)  
