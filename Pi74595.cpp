@@ -98,15 +98,6 @@ int main(int argc, char **argv) {
 		
 	}
 	
-	//thread t1(AplayString, "aplay say.wav");
-	//t1.detach();
-	//system("aplay say.wav");
-	//usleep(500000);
-	//thread t2(AplayString, "aplay thwap.wav");
-	//t2.detach();
-	//system("aplay thwap.wav");
-	
-	
 	if (!bcm2835_init())return 1;
 	
 	bcm2835_gpio_fsel(DI_PIN, BCM2835_GPIO_FSEL_OUTP);
@@ -196,7 +187,7 @@ bool CheckKey(int key){
 }
 
 void SetPA(int key){
-	
+	printf("Start Program2\n");
 	int pitch = key + 24;
 	
 	printf("Setting PA");
