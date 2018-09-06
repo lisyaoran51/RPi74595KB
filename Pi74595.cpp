@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
 	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
 	}
-	for(int i = 0; i < 5; i++) {
+	for(int i = 0; i < 48; i++) {
 		if(!(pid[i] = SetPA(i)))
 			return 0;
 	}
@@ -250,7 +250,7 @@ int PlayPA(int key){
 	
 	printf("Pitch [%d] played!!!!\n", pitch);
 	
-	PlayPaSound(pitch);
+	//PlayPaSound(pitch);
 	
 	int fpid = fork();  
     if (fpid < 0)  
