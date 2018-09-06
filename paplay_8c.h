@@ -14,4 +14,10 @@ typedef struct {
 	char* path;
 } PaSoundSet;
 
+#define KEY_SIZE 48
+
+struct KeyStartSet {
+    bool Start[KEY_SIZE];
+};
+
 #endif

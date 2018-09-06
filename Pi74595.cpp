@@ -14,7 +14,9 @@
 #include <string>
 #include <thread>
 
+
 #include "paplay_8c.h"
+#include <sys/shm.h>
 
 // https://github.com/mignev/shiftpi
 /*
@@ -44,6 +46,8 @@ SH_CP
 
 
 #define INPUT_PIN RPI_BPLUS_GPIO_J8_40 
+
+#define BUFFER_SIZE 2048
 
 
 
@@ -87,11 +91,28 @@ int main(int argc, char **argv) {
 	
 	// 把thread址標清掉
 	handler = NULL;
+	KeyStartSet* keyStartSet = NULL;
 	
-	for(int i = 0; i < 100; i++)
-		startPlay[i] = false;
+	// share memory
 	
+	int shmid;
+	key_t key;
+	if((key = ftok(".", 1)) < 0){
+		printf("ftok error:%s\n", strerror(errno));
+		return -1;
+    }
 	
+	if((shmid = shmget(key, BUFFER_SIZE, SHM_R|SHM_W|IPC_CREAT)) < 0){
+		printf("shmget error:%s\n", strerror(errno));
+		return -1;
+    }
+	
+	if((keyStartSet = (KeyStartSet*)shmat(shmid, NULL, 0)) == (void*)-1){
+		printf("shmat error:%s\n", strerror(errno));
+		return -1;
+	}
+   
+   // share memory
 	
 	if (!bcm2835_init())return 1;
 	
@@ -137,6 +158,13 @@ int main(int argc, char **argv) {
 		string s = string("kill ") + to_string(pid[i]);
 		system(s.c_str());
 	}
+	if(shmdt(shmadd) < 0){
+		perror("shmdt");
+		return -1;
+	}
+	shmctl(shmid, IPC_RMID, NULL);
+	system("ipcs -m");
+	
 	return 0;
 }
 	
@@ -188,7 +216,6 @@ bool CheckKey(int key){
 
 int SetPA(int key){
 	
-	
 	int pitch = key + 24;
 	
 	int fpid = fork();  
@@ -213,7 +240,6 @@ int SetPA(int key){
         // no-op
 	}
     return fpid;  
-	
 }
 
 int PlayPA(int key){

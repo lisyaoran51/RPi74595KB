@@ -51,6 +51,7 @@
 
 #include <pthread.h>
 #include "paplay_8c.h"
+#include <sys/shm.h>
 
 // gcc -ggdb -Wall -o paplay_8c3 paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpthread
 // gcc -ggdb -Wall -o paplay_8c paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
@@ -249,9 +250,28 @@ int PaplayInit(){
 
 int PlayPaSound(int pitch){
 	
-	startPlay[pitch] = true;
+	int shmid;
+	KeyStartSet* keyStartSet = NULL;
+	key_t key;
 	
-	while(startPlay[pitch]);
+	if((key = ftok(".", 1)) < 0){
+		printf("ftok error:%s\n", strerror(errno));
+		return -1;
+    }
+	
+	if((shmid = shmget(key, BUFFER_SIZE, SHM_R|SHM_W)) < 0){
+		printf("shmget error:%s\n", strerror(errno));
+		return -1;
+    }
+	
+	if((keyStartSet = (KeyStartSet*)shmat(shmid, NULL, 0)) == (void*)-1){
+		printf("shmat error:%s\n", strerror(errno));
+		return -1;
+	}
+	
+	keyStartSet->Start[pitch] = true;
+	
+	while(keyStartSet->Start[pitch]);
 	
 	return 0;
 }
@@ -395,6 +415,25 @@ int SetSound(int pitch, char* argv){
 	int retval;
 	int run = 0;
 	
+	int shmid;
+	KeyStartSet* keyStartSet = NULL;
+	key_t key;
+	
+	if((key = ftok(".", 1)) < 0){
+		printf("ftok error:%s\n", strerror(errno));
+		return -1;
+    }
+	
+	if((shmid = shmget(key, BUFFER_SIZE, SHM_R|SHM_W)) < 0){
+		printf("shmget error:%s\n", strerror(errno));
+		return -1;
+    }
+	
+	if((keyStartSet = (KeyStartSet*)shmat(shmid, NULL, 0)) == (void*)-1){
+		printf("shmat error:%s\n", strerror(errno));
+		return -1;
+	}
+	
 	bool tempPitchStart = false;
 	
     while ((r2 = pa_mainloop_iterate(m, 1, &retval)) >= 0){
@@ -403,11 +442,11 @@ int SetSound(int pitch, char* argv){
 			continue;
 		}
 		
-		while(!startPlay[pitch] && !tempPitchStart)
+		while(!keyStartSet->Start[pitch] && !tempPitchStart)
 			usleep(100);
 		
 		tempPitchStart = true;
-		startPlay[pitch] = false;
+		keyStartSet->Start[pitch] = false;
 	}
 	
     if (r2 != -2)
