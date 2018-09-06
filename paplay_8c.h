@@ -1,6 +1,7 @@
 #ifndef PAPLAY_8C_H
 #define PAPLAY_8C_H
 
+static int aaaaa = 0;
 
 static bool startPlay[100];
 

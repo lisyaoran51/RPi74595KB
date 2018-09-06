@@ -107,21 +107,22 @@ int main(int argc, char **argv) {
 	int fpid = fork();  
     if (fpid < 0)  
         printf("error in fork!");  
-    else if (fpid == 0)  
+    else if (fpid == 0)  {
         printf("I am the child process, my process id is %d/n", getpid()); 
 		for(int i = 0; i < 10; i++){
 			printf("temp aaaa = %d\n", aaaaa); 
 			aaaaa++;
 			usleep(1000000);
 		}
-		
-    else  
+	}	
+    else  {
         printf("I am the parent process, my process id is %d/n", getpid());  
 		for(int i = 0; i < 10; i++){
 			printf("temp aaaa = %d\n", aaaaa); 
 			aaaaa++;
 			usleep(1000000);
 		}
+	}
     return 0;  
 	
 	
