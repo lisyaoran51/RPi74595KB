@@ -47,7 +47,6 @@ SH_CP
 
 #define INPUT_PIN RPI_BPLUS_GPIO_J8_40 
 
-#define BUFFER_SIZE 2048
 
 
 
@@ -158,7 +157,7 @@ int main(int argc, char **argv) {
 		string s = string("kill ") + to_string(pid[i]);
 		system(s.c_str());
 	}
-	if(shmdt(shmadd) < 0){
+	if(shmdt(keyStartSet) < 0){
 		perror("shmdt");
 		return -1;
 	}
