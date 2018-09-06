@@ -14,6 +14,8 @@
 #include <string>
 #include <thread>
 
+#inclue "paplay_8c.h"
+
 // https://github.com/mignev/shiftpi
 /*
 
@@ -173,13 +175,48 @@ bool CheckKey(int key){
 	return false;
 	
 }
+
+void SetPA(int key){
+	
+	int pitch = key + 24;
+	
+	string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
+	
+	PaSoundSet paSoundSet;
+	paSoundSet.pitch = pitch;
+	paSoundSet.path = s.c_str();
+	
+	thread t(SetSound, &paSoundSet);
+	
+	printf("Pitch [%d] set. Process number is %d.\n", pitch, t.native_handle());
+	
+	t.detach();
+	
+}
+
+void PlayPA(int key){
+	
+	int pitch = key + 24;
+	printf("KEY [%d] played and reset. Process number is %d.\n", key, t.native_handle());
+	PlayPaSound(pitch);
+	
+	string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
+	
+	PaSoundSet paSoundSet;
+	paSoundSet.pitch = pitch;
+	paSoundSet.path = s.c_str();
+	
+	thread t(SetSound, &paSoundSet);
+	
+	t.detach();
+}
 	
 void Play(int key){
 	//printf("%d press!\n", key);
 	
 	int pitch = key + 24;
 	
-	string s = string("paplay Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
+	string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 	
 	thread t(AplayString, s, key);
 	

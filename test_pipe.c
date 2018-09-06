@@ -7,25 +7,9 @@
 #include <sys/wait.h>  
 #define BUFFER 255  
   
-#include <signal.h>
-#include <string.h>
-#include <errno.h>
-#include <unistd.h>
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <getopt.h>
-#include <locale.h>
-#include <stdbool.h> 
-
-#include <sndfile.h>
-
-#include <pulse/pulseaudio.h>
-#include <pulsecore/i18n.h>
-#include <pulse/mainloop.h>
   
   
-  // gcc  -Wall -o test_pipe test_pipe.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
+  // gcc  -Wall -o test_pipe test_pipe.c
   
 int main(int argc, char **argv) {  
     char buffer[BUFFER + 1];  

@@ -50,7 +50,7 @@
 
 
 #include <pthread.h>
-//#include "paplay_8c.h"
+#include "paplay_8c.h"
 
 // gcc -ggdb -Wall -o paplay_8c3 paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpthread
 // gcc -ggdb -Wall -o paplay_8c paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile
@@ -79,7 +79,7 @@ static sf_count_t (*readf_function)(SNDFILE *_sndfile, void *ptr, sf_count_t fra
 
 int my_pa_mainloop_run(pa_mainloop *m);
 
-static bool startPlay = false;
+
 
 
 /* A shortcut for terminating the application */
@@ -241,10 +241,22 @@ enum {
     ARG_CHANNELMAP
 };
 
-int mymain(char *argv){
+int PaplayInit(){
+	for(int i = 0; i < 100; i++){
+		startPlay[i] = false;
+	}
+}
+
+int PlayPaSound(int pitch){
 	
+	startPlay[i] = true;
 	
+	while(startPlay[i]);
 	
+	return 0;
+}
+
+int SetSound(int pitch, char *argv){
 	
 	pa_mainloop* m = NULL;
     int ret = 1, r, c;
@@ -267,7 +279,6 @@ int mymain(char *argv){
 
     setlocale(LC_ALL, "");
     bindtextdomain(GETTEXT_PACKAGE, PULSE_LOCALEDIR);
-
 
     filename = argv;
 
@@ -380,7 +391,29 @@ int mymain(char *argv){
 	//*************************************************************
 	//*************************************************************
 	//*************************************************************
+	int r;
+	int retval;
+	int run = 0;
 	
+	bool tempPitchStart = false;
+	
+    while ((r = pa_mainloop_iterate(m, 1, &retval)) >= 0){
+		if(run++ < 10){
+			usleep(10000);
+			continue;
+		}
+		
+		while(!startPlay[pitch] && !tempPitchStart)
+			usleep(100);
+		
+		tempPitchStart = true;
+		startPlay[pitch] = false;
+	}
+	
+    if (r != -2)
+		fprintf(stderr, _("pa_mainloop_iterate() failed.\n"));
+	
+	/* pthread
 	pthread_t t;
 		
 	printf("pa thread start\n");
@@ -398,7 +431,7 @@ int mymain(char *argv){
 	//*************************************************************
 	//*************************************************************
 	goto quit;	
-	
+	*/
 	
 	
 	
@@ -439,7 +472,7 @@ quit:
 
 int main(int argc, char *argv[]) {
 	
-	mymain(argv[1]);
+	//mymain(argv[1]);
 	
 	return 0;
 	
@@ -683,7 +716,7 @@ int my_pa_mainloop_run(pa_mainloop *m) {
 		}
 		
 		while(!startPlay)
-			usleep(1000);;
+			usleep(1000);
 	}
 	
     if (r == -2)
