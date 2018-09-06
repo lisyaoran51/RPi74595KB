@@ -123,6 +123,7 @@ int main(int argc, char **argv) {
 	}
 	for(int i = 0; i < 9; i++) {
 		SetPA(i);
+		usleep(1000000);
 	}
 	
 	bool running = true;
