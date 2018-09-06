@@ -181,16 +181,18 @@ bool CheckKey(int key){
 void SetPA(int key){
 	
 	
-	printf("Start Program2\n");
+	
 	//pitch += 24;
 	
-	printf("Setting PA");
+	//printf("Setting PA");
 	
 	//string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 	
 	const char* part1 = "Audio/German_Concert_D_0";
 	const char* part2 = "00";
 	const char* part3 = "_083.wav";
+	
+	printf("Start Program2\n");
 	int pitch = key;
 	sprintf(part3, "%d", pitch+21-9);
 
