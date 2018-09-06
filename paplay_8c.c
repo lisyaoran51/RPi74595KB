@@ -258,16 +258,22 @@ int PlayPaSound(int pitch){
 		printf("ftok error:%s\n", strerror(errno));
 		return -1;
     }
+	printf("PAPLAY stop at ftok() \n");
+	return 0;
 	
 	if((shmid = shmget(key, BUFFER_SIZE, SHM_R|SHM_W)) < 0){
 		printf("shmget error:%s\n", strerror(errno));
 		return -1;
     }
+	printf("PAPLAY stop at shmget() \n");
+	return 0;
 	
 	if((keyStartSet = (KeyStartSet*)shmat(shmid, NULL, 0)) == (void*)-1){
 		printf("shmat error:%s\n", strerror(errno));
 		return -1;
 	}
+	
+	return 0;
 	
 	keyStartSet->Start[pitch] = true;
 	
