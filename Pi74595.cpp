@@ -181,17 +181,17 @@ bool CheckKey(int key){
 void SetPA(int key){
 	
 	
-	int pitch = key;
 	printf("Start Program2\n");
 	//pitch += 24;
 	
 	printf("Setting PA");
 	
-	string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
+	//string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 	
 	const char* part1 = "Audio/German_Concert_D_0";
 	const char* part2 = "00";
 	const char* part3 = "_083.wav";
+	int pitch = key;
 	sprintf(part3, "%d", pitch+21-9);
 
 	char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
