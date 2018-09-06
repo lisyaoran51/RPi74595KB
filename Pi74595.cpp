@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
 	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
 	}
-	for(int i = 0; i < 48; i++) {
+	for(int i = 0; i < 20; i++) {
 		if(!(pid[i] = SetPA(i)))
 			return 0;
 	}
