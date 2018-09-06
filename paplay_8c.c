@@ -470,7 +470,7 @@ quit:
 	
 }
 
-int main(int argc, char *argv[]) {
+int amain(int argc, char *argv[]) {
 	
 	//mymain(argv[1]);
 	

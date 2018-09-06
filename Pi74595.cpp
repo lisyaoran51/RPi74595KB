@@ -51,7 +51,7 @@ SH_CP
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
 // g++ Pi74595.cpp -lbcm2835 -pthread
 
-// g++ Pi74595.cpp -o Pi74595 paplay_8c.o -lbcm2835 -pthread -fpermissive
+// g++ Pi74595.cpp -o Pi74595 paplay_8c.o -lbcm2835 -pthread -fpermissive -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -I
 // gcc -ggdb -Wall -c  paplay_8c.c -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpthread
 
 // 要先打開pulseaudio
