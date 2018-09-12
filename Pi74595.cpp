@@ -117,16 +117,7 @@ int main(int argc, char **argv) {
    
    // share memory
 	
-	if (!bcm2835_init())return 1;
-	
-	bcm2835_gpio_fsel(DI_PIN, BCM2835_GPIO_FSEL_OUTP);
-	bcm2835_gpio_fsel(CL_PIN, BCM2835_GPIO_FSEL_OUTP);
-	bcm2835_gpio_fsel(CE_PIN, BCM2835_GPIO_FSEL_OUTP);
-	
-	// Sets the pin as input.
-    bcm2835_gpio_fsel(INPUT_PIN, BCM2835_GPIO_FSEL_INPT);
-    // Sets the Pull-up mode for the pin.
-    bcm2835_gpio_set_pud(INPUT_PIN, BCM2835_GPIO_PUD_UP);
+	// setup PA
 	
 	int pid[48];
 	
@@ -138,6 +129,25 @@ int main(int argc, char **argv) {
 		if(!(pid[i] = SetPA(i)))
 			return 0;
 	}
+	
+	// setup PA
+	
+	// bcm2835
+	
+	if (!bcm2835_init())return 1;
+	
+	bcm2835_gpio_fsel(DI_PIN, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(CL_PIN, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(CE_PIN, BCM2835_GPIO_FSEL_OUTP);
+	
+	// Sets the pin as input.
+    bcm2835_gpio_fsel(INPUT_PIN, BCM2835_GPIO_FSEL_INPT);
+    // Sets the Pull-up mode for the pin.
+    bcm2835_gpio_set_pud(INPUT_PIN, BCM2835_GPIO_PUD_UP);
+	
+	// bcm2835
+	
+	// running
 	
 	bool running = true;
 	while(running){
@@ -162,6 +172,8 @@ int main(int argc, char **argv) {
 			}
 		}
 	}
+	
+	// running
 	
 	bcm2835_close();
 	for(int i = 0; i < 48; i++){
