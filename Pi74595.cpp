@@ -88,7 +88,8 @@ void AplayString(string s, int key);
 
 int SetPA(int key);
 int PlayPA(int key);
-  
+int PlayPAWithThread(void* key); 
+ 
 int main(int argc, char **argv) {
 	
 	// 把thread址標清掉
@@ -142,10 +143,17 @@ int main(int argc, char **argv) {
 	while(running){
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
-				if(!keyPlaying[i])
+				if(!keyPlaying[i]){
 					//Play(i);
-					if(!(pid[i] = PlayPA(i)))
-						return 0;
+					
+					// 叫tread來playPA，看會不會快一點
+					pthread_t pt;
+					pthread_create(&pt, NULL, PlayPAWithThread, &i);
+					
+					// 直接呼叫playPA，速度有點慢，試試看用thread
+					//if(!(pid[i] = PlayPA(i)))
+					//	return 0;
+				}
 				
 				keyPlaying[i] = true;
 			}
@@ -240,6 +248,38 @@ int SetPA(int key){
 	}	
     else  {
         // no-op
+	}
+    return fpid;  
+}
+
+int PlayPAWithThread(void* key){
+	
+	int pitch = *((int*)key) + 24;
+	
+	printf("Pitch [%d] played!!!!\n", pitch);
+	
+	PlayPaSound(pitch);
+	
+	int fpid = fork();  
+    if (fpid < 0)  
+        printf("error in fork!");  
+    else if (fpid == 0)  {
+        printf("process id %d, Setting my pitch [%d]\n", getpid(), pitch); 
+		
+		char* part1 = "Audio/German_Concert_D_0";
+		char* part2 = malloc(3);
+		char* part3 = "_083.wav";
+		sprintf(part2, "%ld", pitch+21-9);
+
+		char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
+		strcpy(path, part1); /* copy name into the new var */
+		strcat(path, part2); /* add the extension */
+		strcat(path, part3); /* add the extension */
+		
+		SetSound(pitch, path);
+	}	
+    else  {
+        //no-op
 	}
     return fpid;  
 }
