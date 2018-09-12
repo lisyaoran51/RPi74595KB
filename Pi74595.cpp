@@ -234,7 +234,7 @@ int SetPA(int key){
     else if (fpid == 0)  {
         printf("process id %d, Setting my pitch [%d]\n", getpid(), pitch); 
 		
-		char* part1 = "Audio/German_Concert_D_0";
+		char* part1 = "audio_cut/German_Concert_D_0";
 		char* part2 = malloc(3);
 		char* part3 = "_083.wav";
 		sprintf(part2, "%ld", pitch+21-9);
@@ -266,7 +266,7 @@ int PlayPAWithThread(void* key){
     else if (fpid == 0)  {
         printf("process id %d, Setting my pitch [%d]\n", getpid(), pitch); 
 		
-		char* part1 = "Audio/German_Concert_D_0";
+		char* part1 = "audio_cut/German_Concert_D_0";
 		char* part2 = malloc(3);
 		char* part3 = "_083.wav";
 		sprintf(part2, "%ld", pitch+21-9);
@@ -298,7 +298,7 @@ int PlayPA(int key){
     else if (fpid == 0)  {
         printf("process id %d, Setting my pitch [%d]\n", getpid(), pitch); 
 		
-		char* part1 = "Audio/German_Concert_D_0";
+		char* part1 = "audio_cut/German_Concert_D_0";
 		char* part2 = malloc(3);
 		char* part3 = "_083.wav";
 		sprintf(part2, "%ld", pitch+21-9);
