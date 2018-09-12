@@ -149,8 +149,11 @@ int main(int argc, char **argv) {
 	
 	// running
 	
+	
 	bool running = true;
 	while(running){
+		
+		
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i]){
@@ -158,7 +161,8 @@ int main(int argc, char **argv) {
 					
 					// 叫tread來playPA，看會不會快一點
 					pthread_t pt;
-					pthread_create(&pt, NULL, PlayPAWithThread, &i);
+					int* tempPlayingKey = new int(i);
+					pthread_create(&pt, NULL, PlayPAWithThread, tempPlayingKey);
 					
 					// 直接呼叫playPA，速度有點慢，試試看用thread
 					//if(!(pid[i] = PlayPA(i)))
@@ -267,6 +271,8 @@ int SetPA(int key){
 int PlayPAWithThread(void* key){
 	
 	int pitch = *((int*)key) + 24;
+	
+	delete (int*)key;
 	
 	printf("Pitch [%d] played!!!!\n", pitch);
 	
