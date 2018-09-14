@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i]){
-					printf("played! %d\n", i);
+					//printf("played! %d\n", i);
 					PlayWithThread(i);
 					//Play(i);
 				}
@@ -299,6 +299,6 @@ void AplayStringSHM(int flag){
 		
 		//printf("Catch! flag: %d, key: %d\n", flag, pitch-24);
 		
-		//system(s.c_str());
+		system(s.c_str());
 	}
 }
