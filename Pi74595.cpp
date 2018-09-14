@@ -141,8 +141,8 @@ int main(int argc, char **argv) {
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i]){
-					//printf("played! %d\n", i);
-					PlayWithThread(i);
+					printf("played! %d\n", i);
+					//PlayWithThread(i);
 					//Play(i);
 				}
 				keyPlaying[i] = true;
