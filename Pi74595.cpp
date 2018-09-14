@@ -52,7 +52,7 @@ SH_CP
 
 // get bcm2835
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
-// g++ Pi74595.cpp -lbcm2835 -pthread
+// g++ Pi74595.cpp -lbcm2835 -pthread -fpermissive
 
 // rm -f Pi74595 Pi74595.o paplay_8c.o
 // g++ -ggdb -Wall paplay_8c.c -c -o paplay_8c.o -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpthread -fpermissive
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
 	
 	// 把thread址標清掉
 	for(int i = 0; i < 48; i++)
-		handler = NULL;
+		handler[i] = NULL;
 	
 	KeyStartSet* keyStartSet = NULL;
 	
