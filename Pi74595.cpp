@@ -204,9 +204,7 @@ bool CheckKey(int key){
 		bcm2835_gpio_write(CE_PIN, LOW);
 	
 		for(int i = 7; i >= 0; i--){
-			
 			if(i == registerNumber){
-				
 				// register是從最後一顆開始往回存，7->0
 				for( int j = 7; j >= 0; j--){
 					bcm2835_gpio_write(DI_PIN, j == highBit ? HIGH : LOW);
@@ -312,7 +310,7 @@ void AplayStringSHM(int flag){
 		queueLock = true;
 		
 		int pitch = queueKey[queueHead] + 24;
-		string s = string("aplay mono_audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
+		string s = string("paplay mono_audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 		
 		if(queueHead != 15)
 			queueHead++;
