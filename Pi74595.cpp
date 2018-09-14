@@ -180,7 +180,7 @@ bool CheckKey(int key){
 				bcm2835_gpio_write(DI_PIN, j == highBit ? HIGH : LOW);
 				//usleep(1000);
 				bcm2835_gpio_write(CL_PIN, LOW);
-				//usleep(1000);
+				usleep(10);
 				bcm2835_gpio_write(CL_PIN, HIGH);
 			}
 		}
@@ -190,7 +190,7 @@ bool CheckKey(int key){
 				bcm2835_gpio_write(DI_PIN, LOW);
 				//usleep(1000);
 				bcm2835_gpio_write(CL_PIN, LOW);
-				//usleep(1000);
+				usleep(10);
 				bcm2835_gpio_write(CL_PIN, HIGH);
 			}
 		}
@@ -198,35 +198,9 @@ bool CheckKey(int key){
 	//usleep(1000);
 	bcm2835_gpio_write(CE_PIN, HIGH);
 	
-	usleep(50);
-	if(bcm2835_gpio_lev(INPUT_PIN) == HIGH){
-		
-		bcm2835_gpio_write(CE_PIN, LOW);
-	
-		for(int i = 7; i >= 0; i--){
-			if(i == registerNumber){
-				// register是從最後一顆開始往回存，7->0
-				for( int j = 7; j >= 0; j--){
-					bcm2835_gpio_write(DI_PIN, j == highBit ? HIGH : LOW);
-					bcm2835_gpio_write(CL_PIN, LOW);
-					bcm2835_gpio_write(CL_PIN, HIGH);
-				}
-			}
-			else{
-				for( int j = 0; j < 8; j++){
-					bcm2835_gpio_write(DI_PIN, LOW);
-					bcm2835_gpio_write(CL_PIN, LOW);
-					bcm2835_gpio_write(CL_PIN, HIGH);
-				}
-			}
-		}
-		bcm2835_gpio_write(CE_PIN, HIGH);
-		
-		usleep(50);
-		
-		if(bcm2835_gpio_lev(INPUT_PIN) == HIGH)
-			return true;
-	}
+	usleep(100);
+	if(bcm2835_gpio_lev(INPUT_PIN) == HIGH)
+		return true;
 	
 	return false;
 	
