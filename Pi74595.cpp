@@ -315,9 +315,9 @@ void AplayStringSHM(int flag){
 		while(threadFlag != flag);
 		
 		
-		while(queueLock || queueHead != queueTail){
-			printf("Waiting... lock: %d, head: %d, tail: %d\n", queueLock, queueHead, queueTail);
-			usleep(5000);
+		while(queueLock || queueHead == queueTail){
+			//printf("Waiting... lock: %d, head: %d, tail: %d\n", queueLock, queueHead, queueTail);
+			//usleep(5000);
 		}
 		
 		queueLock = true;
