@@ -297,7 +297,7 @@ void AplayStringSHM(int flag){
 		else
 			threadFlag = 0;
 		
-		printf("Catch! flag: %d, key: %d\n", flag, pitch-24);
+		//printf("Catch! flag: %d, key: %d\n", flag, pitch-24);
 		
 		system(s.c_str());
 	}
