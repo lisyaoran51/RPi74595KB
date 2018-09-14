@@ -198,7 +198,7 @@ bool CheckKey(int key){
 	//usleep(1000);
 	bcm2835_gpio_write(CE_PIN, HIGH);
 	
-	usleep(100);
+	//usleep(100);
 	if(bcm2835_gpio_lev(INPUT_PIN) == HIGH)
 		return true;
 	
@@ -243,7 +243,7 @@ void PlayWithThread(int key){
 	
 	queueKey[queueIndex] = key;
 	
-	printf("played! queuehead: %d, queuetail: %d, key: %d\n", queueHead, queueTail, key);
+	//printf("played! queuehead: %d, queuetail: %d, key: %d\n", queueHead, queueTail, key);
 	
 	queueLock = false;
 	
@@ -297,7 +297,7 @@ void AplayStringSHM(int flag){
 		else
 			threadFlag = 0;
 		
-		printf("Catch! flag: %d, key: %d\n", flag, pitch-24);
+		//printf("Catch! flag: %d, key: %d\n", flag, pitch-24);
 		
 		system(s.c_str());
 	}
