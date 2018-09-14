@@ -15,8 +15,8 @@
 #include <thread>
 
 
-#include "paplay_8c.h"
-#include <sys/shm.h>
+//#include "paplay_8c.h"
+//#include <sys/shm.h>
 
 // https://github.com/mignev/shiftpi
 /*
@@ -110,31 +110,6 @@ int main(int argc, char **argv) {
 		SetThread(i);
 	}
 	
-	KeyStartSet* keyStartSet = NULL;
-	
-	// share memory
-	
-	int shmid;
-	key_t key;
-	if((key = ftok(".", 1)) < 0){
-		printf("ftok error:%s\n", strerror(errno));
-		return -1;
-    }
-	
-	if((shmid = shmget(key, BUFFER_SIZE, SHM_R|SHM_W|IPC_CREAT)) < 0){
-		printf("shmget error:%s\n", strerror(errno));
-		return -1;
-    }
-	
-	if((keyStartSet = (KeyStartSet*)shmat(shmid, NULL, 0)) == (void*)-1){
-		printf("shmat error:%s\n", strerror(errno));
-		return -1;
-	}
-   
-    // share memory
-	
-	// setup PA
-	
 	int pid[48];
 	
 	bool keyPlaying[48];
@@ -143,12 +118,9 @@ int main(int argc, char **argv) {
 		keyStart[i] = false;
 	}
 	
-	
-	// setup PA
-	
 	// bcm2835
 	
-	if (!bcm2835_init())return 1;
+	if (!bcm2835_init()) return 1;
 	
 	bcm2835_gpio_fsel(DI_PIN, BCM2835_GPIO_FSEL_OUTP);
 	bcm2835_gpio_fsel(CL_PIN, BCM2835_GPIO_FSEL_OUTP);
@@ -182,16 +154,6 @@ int main(int argc, char **argv) {
 	// running
 	
 	bcm2835_close();
-	for(int i = 0; i < 48; i++){
-		string s = string("kill ") + to_string(pid[i]);
-		system(s.c_str());
-	}
-	if(shmdt(keyStartSet) < 0){
-		perror("shmdt");
-		return -1;
-	}
-	shmctl(shmid, IPC_RMID, NULL);
-	system("ipcs -m");
 	
 	return 0;
 }
