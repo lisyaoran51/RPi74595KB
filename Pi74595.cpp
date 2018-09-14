@@ -308,6 +308,8 @@ void AplayString(string s, int key){
 
 void AplayStringSHM(int flag){
 	
+	printf("thread %d set\n", flag);
+	
 	while(1){
 		/* 等到變true再開始播 */
 		while(threadFlag != flag);
