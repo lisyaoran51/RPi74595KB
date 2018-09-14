@@ -156,8 +156,8 @@ int main(int argc, char **argv) {
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i]){
-					//Play(i);
-					printf("[%d] played!!!!\n", i);
+					Play(i);
+					
 					// 叫tread來playPA，看會不會快一點
 					//pthread_t pt;
 					//int* tempPlayingKey = new int(i);
