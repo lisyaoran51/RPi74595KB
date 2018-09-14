@@ -77,7 +77,15 @@ SH_CP
 
 using namespace std;
 
-pthread_t handler[48];
+bool queueLock = false;
+int queueHead = 0;
+int queueTail = 0;
+int queueKey[16];
+string queueString[16];
+
+
+pthread_t handler[6];
+int threadFlag = 0;
 bool keyStart[48];
 
 bool CheckKey(int key);
@@ -97,8 +105,10 @@ int PlayPAWithThread(void* key);
 int main(int argc, char **argv) {
 	
 	// 把thread址標清掉
-	for(int i = 0; i < 48; i++)
+	for(int i = 0; i < 6; i++){
 		handler[i] = NULL;
+		SetThread(i);
+	}
 	
 	KeyStartSet* keyStartSet = NULL;
 	
@@ -131,7 +141,6 @@ int main(int argc, char **argv) {
 	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
 		keyStart[i] = false;
-		SetThread(i);
 	}
 	
 	
@@ -235,102 +244,6 @@ bool CheckKey(int key){
 	return false;
 	
 }
-
-int SetPA(int key){
-	
-	int pitch = key + 24;
-	
-	int fpid = fork();  
-    if (fpid < 0)  
-        printf("error in fork!");  
-    else if (fpid == 0)  {
-        printf("process id %d, Setting my pitch [%d]\n", getpid(), pitch); 
-		
-		char* part1 = "audio_cut/German_Concert_D_0";
-		char* part2 = malloc(3);
-		char* part3 = "_083.wav";
-		sprintf(part2, "%ld", pitch+21-9);
-
-		char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
-		strcpy(path, part1); /* copy name into the new var */
-		strcat(path, part2); /* add the extension */
-		strcat(path, part3); /* add the extension */
-		
-		SetSound(pitch, path);
-	}	
-    else  {
-        // no-op
-	}
-    return fpid;  
-}
-
-int PlayPAWithThread(void* key){
-	
-	int pitch = *((int*)key) + 24;
-	
-	delete (int*)key;
-	
-	printf("Pitch [%d] played!!!!\n", pitch);
-	
-	PlayPaSound(pitch);
-	
-	int fpid = fork();  
-    if (fpid < 0)  
-        printf("error in fork!");  
-    else if (fpid == 0)  {
-        printf("process id %d, Setting my pitch [%d]\n", getpid(), pitch); 
-		
-		char* part1 = "audio_cut/German_Concert_D_0";
-		char* part2 = malloc(3);
-		char* part3 = "_083.wav";
-		sprintf(part2, "%ld", pitch+21-9);
-
-		char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
-		strcpy(path, part1); /* copy name into the new var */
-		strcat(path, part2); /* add the extension */
-		strcat(path, part3); /* add the extension */
-		
-		SetSound(pitch, path);
-	}	
-    else  {
-        //no-op
-	}
-    return fpid;  
-}
-
-int PlayPA(int key){
-	
-	int pitch = key + 24;
-	
-	printf("Pitch [%d] played!!!!\n", pitch);
-	
-	
-	
-	PlayPaSound(pitch);
-	
-	int fpid = fork();  
-    if (fpid < 0)  
-        printf("error in fork!");  
-    else if (fpid == 0)  {
-        printf("process id %d, Setting my pitch [%d]\n", getpid(), pitch); 
-		
-		char* part1 = "audio_cut/German_Concert_D_0";
-		char* part2 = malloc(3);
-		char* part3 = "_083.wav";
-		sprintf(part2, "%ld", pitch+21-9);
-
-		char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
-		strcpy(path, part1); /* copy name into the new var */
-		strcat(path, part2); /* add the extension */
-		strcat(path, part3); /* add the extension */
-		
-		SetSound(pitch, path);
-	}	
-    else  {
-        //no-op
-	}
-    return fpid;  
-}
 	
 void Play(int key){
 	//printf("%d press!\n", key);
@@ -356,35 +269,28 @@ void Play(int key){
 }
 
 void PlayWithThread(int key){
-	//printf("%d press!\n", key);
 	
-	keyStart[key] = true;
+	while(queueLock);
 	
-	/* 等到變false再建新的 */
-	while(keyStart[key]);
+	queueLock = true;
 	
-	int pitch = key + 24;
+	int queueIndex = 15;	// 先假設tail在最後一個元素
+	if(queueTail != 15)
+			queueIndex = queueTail++;
+		else
+			queueTail = 0;
 	
-	string s = string("aplay mono_audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav -N");
+	queueKey[queueTail] = key;
 	
-	thread t(AplayStringSHM, s, key);
-	
-	handler[key] = t.native_handle();
-	//printf("The new process num is %d.\n", handler[key]);
-	
-	t.detach();
+	queueLock = false;
 	
 }
 
-int SetThread(int key){
+int SetThread(int flag){
 	
-	int pitch = key + 24;
+	thread t(AplayStringSHM, flag);
 	
-	string s = string("aplay mono_audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav -N");
-	
-	thread t(AplayStringSHM, s, key);
-	
-	handler[key] = t.native_handle();
+	handler[flag] = t.native_handle();
 	//printf("The new process num is %d.\n", handler[key]);
 	
 	t.detach();
@@ -398,13 +304,30 @@ void AplayString(string s, int key){
 	handler[key] = NULL;
 }
 
-void AplayStringSHM(string s, int key){
+void AplayStringSHM(int flag){
 	
-	/* 等到變true再開始播 */
-	while(!keyStart[key]);
-	
-	keyStart[key] = false;
-	
-	system(s.c_str());
-	
+	while(1){
+		/* 等到變true再開始播 */
+		while(threadFlag != flag);
+		
+		while(queueLock || queueHead != queueTail);
+		
+		queueLock = true;
+		
+		int pitch = queueKey[queueHead] + 24;
+		string s = string("aplay mono_audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
+		
+		if(queueHead != 15)
+			queueHead++;
+		else
+			queueHead = 0;
+		queueLock = false;
+		
+		if(threadFlag != 5)
+			threadFlag++;
+		else
+			threadFlag = 0;
+		
+		system(s.c_str());
+	}
 }
