@@ -282,6 +282,8 @@ void PlayWithThread(int key){
 	
 	queueKey[queueTail] = key;
 	
+	printf("played! queuehead: %d, queuetail: %d, key: %d\n", queueHead, queueTail, key);
+	
 	queueLock = false;
 	
 }
@@ -327,6 +329,8 @@ void AplayStringSHM(int flag){
 			threadFlag++;
 		else
 			threadFlag = 0;
+		
+		printf("Catch! flag: %d, key: %d\n", flag, pitch-24);
 		
 		system(s.c_str());
 	}
