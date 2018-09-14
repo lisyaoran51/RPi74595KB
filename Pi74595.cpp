@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i]){
-					//printf("played! %d\n", i);
+					printf("played! %d\n", i);
 					PlayWithThread(i);
 					//Play(i);
 				}
@@ -180,7 +180,7 @@ bool CheckKey(int key){
 				bcm2835_gpio_write(DI_PIN, j == highBit ? HIGH : LOW);
 				//usleep(1000);
 				bcm2835_gpio_write(CL_PIN, LOW);
-				usleep(10);
+				//usleep(10);
 				bcm2835_gpio_write(CL_PIN, HIGH);
 			}
 		}
@@ -190,7 +190,7 @@ bool CheckKey(int key){
 				bcm2835_gpio_write(DI_PIN, LOW);
 				//usleep(1000);
 				bcm2835_gpio_write(CL_PIN, LOW);
-				usleep(10);
+				//usleep(10);
 				bcm2835_gpio_write(CL_PIN, HIGH);
 			}
 		}
