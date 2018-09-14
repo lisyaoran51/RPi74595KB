@@ -302,6 +302,6 @@ void AplayStringSHM(int flag){
 		
 		printf("Catch! flag: %d, key: %d\n", flag, pitch-24);
 		
-		system(s.c_str());
+		//system(s.c_str());
 	}
 }
