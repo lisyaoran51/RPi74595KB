@@ -361,7 +361,7 @@ void PlayWithThread(int key){
 	keyStart[key] = true;
 	
 	/* 等到變false再建新的 */
-	while(keyStart[i]);
+	while(keyStart[key]);
 	
 	int pitch = key + 24;
 	
