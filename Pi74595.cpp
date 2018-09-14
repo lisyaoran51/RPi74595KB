@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
 	// 把thread址標清掉
 	for(int i = 0; i < 6; i++){
 		handler[i] = NULL;
-		SetThread(i);
+		//SetThread(i);
 	}
 	
 	int pid[48];
@@ -141,8 +141,9 @@ int main(int argc, char **argv) {
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i]){
-					printf("played! %d\n", i);
-					PlayWithThread(i);
+					//printf("played! %d\n", i);
+					//PlayWithThread(i);
+					Play(i);
 				}
 				keyPlaying[i] = true;
 			}
