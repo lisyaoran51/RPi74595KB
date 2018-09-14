@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i]){
-					//printf("played! %d\n", i);
+					printf("played! %d\n", i);
 					PlayWithThread(i);
 					//Play(i);
 				}
@@ -269,7 +269,7 @@ void PlayWithThread(int key){
 	
 	queueKey[queueIndex] = key;
 	
-	printf("played! queuehead: %d, queuetail: %d, key: %d\n", queueHead, queueTail, key);
+	//printf("played! queuehead: %d, queuetail: %d, key: %d\n", queueHead, queueTail, key);
 	
 	queueLock = false;
 	
@@ -323,7 +323,7 @@ void AplayStringSHM(int flag){
 		else
 			threadFlag = 0;
 		
-		printf("Catch! flag: %d, key: %d\n", flag, pitch-24);
+		//printf("Catch! flag: %d, key: %d\n", flag, pitch-24);
 		
 		//system(s.c_str());
 	}
