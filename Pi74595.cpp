@@ -77,7 +77,7 @@ SH_CP
 
 using namespace std;
 
-pthread_t* handler;
+pthread_t handler[48];
 
 
 bool CheckKey(int key);
@@ -93,7 +93,9 @@ int PlayPAWithThread(void* key);
 int main(int argc, char **argv) {
 	
 	// 把thread址標清掉
-	handler = NULL;
+	for(int i = 0; i < 48; i++)
+		handler = NULL;
+	
 	KeyStartSet* keyStartSet = NULL;
 	
 	// share memory
@@ -125,10 +127,7 @@ int main(int argc, char **argv) {
 	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
 	}
-	for(int i = 0; i < 48; i++) {
-		if(!(pid[i] = SetPA(i)))
-			return 0;
-	}
+	
 	
 	// setup PA
 	
@@ -157,12 +156,12 @@ int main(int argc, char **argv) {
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i]){
-					//Play(i);
+					Play(i);
 					
 					// 叫tread來playPA，看會不會快一點
-					pthread_t pt;
-					int* tempPlayingKey = new int(i);
-					pthread_create(&pt, NULL, PlayPAWithThread, tempPlayingKey);
+					//pthread_t pt;
+					//int* tempPlayingKey = new int(i);
+					//pthread_create(&pt, NULL, PlayPAWithThread, tempPlayingKey);
 					
 					// 直接呼叫playPA，速度有點慢，試試看用thread
 					//if(!(pid[i] = PlayPA(i)))
