@@ -314,7 +314,11 @@ void AplayStringSHM(int flag){
 		/* 等到變true再開始播 */
 		while(threadFlag != flag);
 		
-		while(queueLock || queueHead != queueTail);
+		
+		while(queueLock || queueHead != queueTail){
+			printf("Waiting... lock: %d, head: %d, tail: %d\n", queueLock, queueHead, queueTail);
+			usleep(5000);
+		}
 		
 		queueLock = true;
 		
