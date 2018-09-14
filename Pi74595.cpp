@@ -78,13 +78,17 @@ SH_CP
 using namespace std;
 
 pthread_t handler[48];
-
+bool keyStart[48];
 
 bool CheckKey(int key);
 
 void Play(int key);
+
+void PlayWithThread(int key);
+int SetThread(int key);
  
 void AplayString(string s, int key);
+void AplayStringSHM(string s, int key);
 
 int SetPA(int key);
 int PlayPA(int key);
@@ -126,6 +130,8 @@ int main(int argc, char **argv) {
 	bool keyPlaying[48];
 	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
+		keyStart[i] = false;
+		SetThread(i);
 	}
 	
 	
@@ -151,23 +157,11 @@ int main(int argc, char **argv) {
 	
 	bool running = true;
 	while(running){
-		
-		
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i]){
-					Play(i);
-					
-					// 叫tread來playPA，看會不會快一點
-					//pthread_t pt;
-					//int* tempPlayingKey = new int(i);
-					//pthread_create(&pt, NULL, PlayPAWithThread, tempPlayingKey);
-					
-					// 直接呼叫playPA，速度有點慢，試試看用thread
-					//if(!(pid[i] = PlayPA(i)))
-					//	return 0;
+					PlayWithThread(i);
 				}
-				
 				keyPlaying[i] = true;
 			}
 			else{
@@ -310,6 +304,8 @@ int PlayPA(int key){
 	
 	printf("Pitch [%d] played!!!!\n", pitch);
 	
+	
+	
 	PlayPaSound(pitch);
 	
 	int fpid = fork();  
@@ -359,8 +355,56 @@ void Play(int key){
 	
 }
 
+void PlayWithThread(int key){
+	//printf("%d press!\n", key);
+	
+	keyStart[key] = true;
+	
+	/* 等到變false再建新的 */
+	while(keyStart[i]);
+	
+	int pitch = key + 24;
+	
+	string s = string("aplay mono_audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav -N");
+	
+	thread t(AplayStringSHM, s, key);
+	
+	handler[key] = t.native_handle();
+	//printf("The new process num is %d.\n", handler[key]);
+	
+	t.detach();
+	
+}
+
+int SetThread(int key){
+	
+	int pitch = key + 24;
+	
+	string s = string("aplay mono_audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav -N");
+	
+	thread t(AplayStringSHM, s, key);
+	
+	handler[key] = t.native_handle();
+	//printf("The new process num is %d.\n", handler[key]);
+	
+	t.detach();
+	
+    return 1;  
+}
+
 void AplayString(string s, int key){
 	system(s.c_str());
 	printf("[%d] Process %d ends.\n", key, handler[key]);
 	handler[key] = NULL;
+}
+
+void AplayStringSHM(string s, int key){
+	
+	/* 等到變true再開始播 */
+	while(!keyStart[key]);
+	
+	keyStart[key] = false;
+	
+	system(s.c_str());
+	
 }
