@@ -141,8 +141,8 @@ int main(int argc, char **argv) {
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i]){
-					printf("played! %d\n", i);
-					//PlayWithThread(i);
+					//printf("played! %d\n", i);
+					PlayWithThread(i);
 					//Play(i);
 				}
 				keyPlaying[i] = true;
@@ -244,7 +244,7 @@ void PlayWithThread(int key){
 		else
 			queueTail = 0;
 	
-	queueKey[queueTail] = key;
+	queueKey[queueIndex] = key;
 	
 	printf("played! queuehead: %d, queuetail: %d, key: %d\n", queueHead, queueTail, key);
 	
