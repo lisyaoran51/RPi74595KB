@@ -198,7 +198,7 @@ bool CheckKey(int key){
 	//usleep(1000);
 	bcm2835_gpio_write(CE_PIN, HIGH);
 	
-	//usleep(100);
+	usleep(100);
 	if(bcm2835_gpio_lev(INPUT_PIN) == HIGH)
 		return true;
 	
