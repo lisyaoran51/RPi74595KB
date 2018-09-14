@@ -341,7 +341,7 @@ void Play(int key){
 	
 	int pitch = key + 24;
 	
-	string s = string("aplay audio_cut/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
+	string s = string("aplay -d1 audio_cut/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 	
 	thread t(AplayString, s, key);
 	
