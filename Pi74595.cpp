@@ -117,7 +117,7 @@ int main(int argc, char **argv) {
 		return -1;
 	}
    
-   // share memory
+    // share memory
 	
 	// setup PA
 	
@@ -338,7 +338,7 @@ void Play(int key){
 	
 	int pitch = key + 24;
 	
-	string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
+	string s = string("aplay Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 	
 	thread t(AplayString, s, key);
 	
@@ -348,6 +348,7 @@ void Play(int key){
 		pthread_cancel(handler[key]);
 		printf("The last process num is %d. ", handler[key]);
 	}
+	
 	handler[key] = t.native_handle();
 	printf("The new process num is %d.\n", handler[key]);
 	
