@@ -231,9 +231,9 @@ bool CheckKey(int key){
 	//usleep(1000);
 	bcm2835_gpio_write(CE_PIN, HIGH);
 	
-	usleep(50);
+	usleep(20);
 	if(bcm2835_gpio_lev(INPUT_PIN) == HIGH){
-		usleep(50);
+		usleep(20);
 		if(bcm2835_gpio_lev(INPUT_PIN) == HIGH)
 			return true;
 	}
@@ -349,11 +349,11 @@ void Play(int key){
 	
 	if(handler[key]){
 		pthread_cancel(handler[key]);
-		printf("The last process num is %d. ", handler[key]);
+		//printf("The last process num is %d. ", handler[key]);
 	}
 	
 	handler[key] = t.native_handle();
-	printf("The new process num is %d.\n", handler[key]);
+	//printf("The new process num is %d.\n", handler[key]);
 	
 	t.detach();
 	
