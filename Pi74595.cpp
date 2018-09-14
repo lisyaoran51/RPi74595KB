@@ -284,7 +284,7 @@ void AplayStringSHM(int flag){
 		queueLock = true;
 		
 		int pitch = queueKey[queueHead] + 24;
-		string s = string("paplay mono_audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
+		string s = string("aplay mono_audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 		
 		if(queueHead != 15)
 			queueHead++;
