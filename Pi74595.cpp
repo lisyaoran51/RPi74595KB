@@ -96,7 +96,7 @@ void PlayWithThread(int key);
 int SetThread(int key);
  
 void AplayString(string s, int key);
-void AplayStringSHM(string s, int key);
+void AplayStringSHM(int flag);
 
 int SetPA(int key);
 int PlayPA(int key);
