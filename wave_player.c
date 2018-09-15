@@ -18,8 +18,8 @@
 #define SOURCE_FILE "wave-files/100060__menegass__gui-drum-splash-hard.wav"
 //#define SOURCE_FILE "wave-files/100053__menegass__gui-drum-cc.wav"
 
-#define SAMPLE_RATE   8000
-#define NUM_CHANNELS  1
+#define SAMPLE_RATE   44100
+#define NUM_CHANNELS  2
 #define SAMPLE_SIZE   (sizeof(short)) 	// bytes per sample
 #define RESAMPLE_RATE 10
 
@@ -73,7 +73,7 @@ int main(void)
 	wavedata_t sampleFile2;
 	
 	Audio_readWaveFileIntoMemory(file1, &sampleFile1);
-	Audio_readWaveFileIntoMemory(file2, &sampleFile2);
+	//Audio_readWaveFileIntoMemory(file2, &sampleFile2);
 	
 	/***
 	wavedata_t sampleFile3;
@@ -147,7 +147,7 @@ snd_pcm_t *Audio_openDevice()
 			SND_PCM_ACCESS_RW_INTERLEAVED,
 			NUM_CHANNELS,
 			SAMPLE_RATE,
-			1,			// Allow software resampling
+			0,			// Allow software resampling
 			50000);		// 0.05 seconds per buffer
 	if (err < 0) {
 		printf("Play-back configuration error: %s\n", snd_strerror(err));
