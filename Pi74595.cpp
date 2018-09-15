@@ -326,6 +326,8 @@ int SetAlsa(int flag){
 		}
 		
 	}	
+	printf("end fork #%d\n", flag); 
+	
     return fpid;
 }
 
