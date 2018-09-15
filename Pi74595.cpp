@@ -17,6 +17,7 @@
 
 //#include "paplay_8c.h"
 #include <sys/shm.h>
+#include <alsa/asoundlib.h>
 
 // https://github.com/mignev/shiftpi
 /*
@@ -68,7 +69,7 @@ struct KeyStartSet {
 
 // get bcm2835
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
-// g++ Pi74595.cpp -lbcm2835 -pthread -lasound
+// g++ Pi74595.cpp -o Pi74595 -lbcm2835 -pthread -lasound -fpermissive
 
 // rm -f Pi74595 Pi74595.o paplay_8c.o
 // g++ -ggdb -Wall paplay_8c.c -c -o paplay_8c.o -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpthread -fpermissive
@@ -155,7 +156,7 @@ int main(int argc, char **argv) {
 		
 		FILE *file = fopen(s.c_str(), "r");
 		if (file == NULL) {
-			fprintf(stderr, "ERROR: Unable to open file %s.\n", fileName);
+			fprintf(stderr, "ERROR: Unable to open file %s.\n", s.c_str());
 			exit(EXIT_FAILURE);
 		}
 		
@@ -335,101 +336,6 @@ int PlayAlsaSHM(short* wavData, KeyStartSet* keyStartSet){
 	
 	return 1;
 }
-
-int SetPA(int key){
-	
-	int pitch = key + 24;
-	
-	int fpid = fork();  
-    if (fpid < 0)  
-        printf("error in fork!");  
-    else if (fpid == 0)  {
-        printf("process id %d, Setting my pitch [%d]\n", getpid(), pitch); 
-		
-		char* part1 = "audio_cut/German_Concert_D_0";
-		char* part2 = malloc(3);
-		char* part3 = "_083.wav";
-		sprintf(part2, "%ld", pitch+21-9);
-
-		char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
-		strcpy(path, part1); /* copy name into the new var */
-		strcat(path, part2); /* add the extension */
-		strcat(path, part3); /* add the extension */
-		
-		SetSound(pitch, path);
-	}	
-    else  {
-        // no-op
-	}
-    return fpid;  
-}
-
-
-int PlayPAWithThread(void* key){
-	
-	int pitch = *((int*)key) + 24;
-	
-	delete (int*)key;
-	
-	printf("Pitch [%d] played!!!!\n", pitch);
-	
-	PlayPaSound(pitch);
-	
-	int fpid = fork();  
-    if (fpid < 0)  
-        printf("error in fork!");  
-    else if (fpid == 0)  {
-        printf("process id %d, Setting my pitch [%d]\n", getpid(), pitch); 
-		
-		char* part1 = "audio_cut/German_Concert_D_0";
-		char* part2 = malloc(3);
-		char* part3 = "_083.wav";
-		sprintf(part2, "%ld", pitch+21-9);
-
-		char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
-		strcpy(path, part1); /* copy name into the new var */
-		strcat(path, part2); /* add the extension */
-		strcat(path, part3); /* add the extension */
-		
-		SetSound(pitch, path);
-	}	
-    else  {
-        //no-op
-	}
-    return fpid;  
-}
-
-int PlayPA(int key){
-	
-	int pitch = key + 24;
-	
-	printf("Pitch [%d] played!!!!\n", pitch);
-	
-	PlayPaSound(pitch);
-	
-	int fpid = fork();  
-    if (fpid < 0)  
-        printf("error in fork!");  
-    else if (fpid == 0)  {
-        printf("process id %d, Setting my pitch [%d]\n", getpid(), pitch); 
-		
-		char* part1 = "audio_cut/German_Concert_D_0";
-		char* part2 = malloc(3);
-		char* part3 = "_083.wav";
-		sprintf(part2, "%ld", pitch+21-9);
-
-		char* path = malloc(strlen(part1) + strlen(part2) + strlen(part3) + 1); /* make space for the new string (should check the return value ...) */
-		strcpy(path, part1); /* copy name into the new var */
-		strcat(path, part2); /* add the extension */
-		strcat(path, part3); /* add the extension */
-		
-		SetSound(pitch, path);
-	}	
-    else  {
-        //no-op
-	}
-    return fpid;  
-}
 	
 void Play(int key){
 	//printf("%d press!\n", key);
@@ -442,19 +348,10 @@ void Play(int key){
 	
 	printf("[%d] ", key);
 	
-	if(handler[key]){
-		pthread_cancel(handler[key]);
-		printf("The last process num is %d. ", handler[key]);
-	}
-	handler[key] = t.native_handle();
-	printf("The new process num is %d.\n", handler[key]);
-	
 	t.detach();
 	
 }
 
 void AplayString(string s, int key){
 	system(s.c_str());
-	printf("[%d] Process %d ends.\n", key, handler[key]);
-	handler[key] = NULL;
 }
