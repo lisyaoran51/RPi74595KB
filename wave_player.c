@@ -218,8 +218,8 @@ void Audio_playFile(snd_pcm_t *handle, wavedata_t *pWaveData)
 	fflush(stdout);
 	printf("play!!!\n");
 	
-	short silence[800];
-	for(int i = 0; i < 800; i++)
+	short silence[400];
+	for(int i = 0; i < 400; i++)
 		silence[i] = 0;
 	
 	
@@ -227,7 +227,7 @@ void Audio_playFile(snd_pcm_t *handle, wavedata_t *pWaveData)
 	snd_pcm_sframes_t frames = snd_pcm_writei(handle, pWaveData->pData, pWaveData->numSamples);
 	printf("wait\n");
 	for(int i = 0; i < 100; i++)
-		frames = snd_pcm_writei(handle, silence, 400);
+		frames = snd_pcm_writei(handle, silence, 200);
 	frames = snd_pcm_writei(handle, pWaveData->pData, pWaveData->numSamples);
 
 	// Check for errors

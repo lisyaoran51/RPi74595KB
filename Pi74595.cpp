@@ -47,18 +47,28 @@ SH_CP
 
 #define INPUT_PIN RPI_BPLUS_GPIO_J8_40 
 
+#define QUEUE_SIZE 8
 #define WAV_SIZE 8000
+#define KEY_SIZE 48
 
 struct KeyStartSet {
-    bool Start[KEY_SIZE];
-	short wavData[WAV_SIZE];
+	int ForkFlag;
+	
+	bool QueueLock;
+    int KeyStart[QUEUE_SIZE];
+	int QueueHead;
+	int QueueTail;
+	
+	short WavData[QUEUE_SIZE][WAV_SIZE];
 };
 
-
+#define SAMPLE_RATE   8000
+#define NUM_CHANNELS  1
+#define SILENCE_LENGTH 400
 
 // get bcm2835
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
-// g++ Pi74595.cpp -lbcm2835 -pthread
+// g++ Pi74595.cpp -lbcm2835 -pthread -lasound
 
 // rm -f Pi74595 Pi74595.o paplay_8c.o
 // g++ -ggdb -Wall paplay_8c.c -c -o paplay_8c.o -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpthread -fpermissive
@@ -91,17 +101,19 @@ void Play(int key);
  
 void AplayString(string s, int key);
 
-int SetAlsa(int key);
+int SetAlsa(int flag);
+
+int PlayAlsaSHM(short* wavData, KeyStartSet* keyStartSet);
 int PlayPA(int key);
 int PlayPAWithThread(void* key); 
  
 int main(int argc, char **argv) {
 	
-	// 把thread址標清掉
-	KeyStartSet* keyStartSet = NULL;
-	
-	if(SetAlsa() == 0)
-		return 0;
+	/* fork幾個播音樂的程式 */
+	for(int i = 0; i < 5; i++){
+		if(SetAlsa(i) == 0)
+			return 0;
+	}
 	
 	// share memory
 	
@@ -112,25 +124,45 @@ int main(int argc, char **argv) {
 		return -1;
     }
 	
-	if((shmid = shmget(key, BUFFER_SIZE, SHM_R|SHM_W|IPC_CREAT)) < 0){
+	if((shmid = shmget(key, sizeof(KeyStartSet), SHM_R|SHM_W|IPC_CREAT)) < 0){
 		printf("shmget error:%s\n", strerror(errno));
 		return -1;
     }
 	
+	KeyStartSet* keyStartSet = NULL;
 	if((keyStartSet = (KeyStartSet*)shmat(shmid, NULL, 0)) == (void*)-1){
 		printf("shmat error:%s\n", strerror(errno));
 		return -1;
 	}
+	
+	keyStartSet->ForkFlag = 0;
+	keyStartSet->QueueLock = false;
+	keyStartSet->QueueHead = 0;
+	keyStartSet->QueueTail = 0;
    
    // share memory
 	
 	// setup
 	
-	int pid[48];
-	
 	bool keyPlaying[48];
+	short wavData[KEY_SIZE][WAV_SIZE];
 	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
+		
+		int pitch = i + 24;
+		
+		string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
+		
+		FILE *file = fopen(s.c_str(), "r");
+		if (file == NULL) {
+			fprintf(stderr, "ERROR: Unable to open file %s.\n", fileName);
+			exit(EXIT_FAILURE);
+		}
+		
+		fseek(file, 44, SEEK_SET);	// header 44 byte
+		fread(wavData[i], sizeof(short), WAV_SIZE, file);
+		
+		fclose(file);
 	}
 	
 	// setup
@@ -152,26 +184,13 @@ int main(int argc, char **argv) {
 	
 	// running
 	
-	
 	bool running = true;
 	while(running){
-		
-		
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i]){
-					//Play(i);
-					
-					// 叫tread來playPA，看會不會快一點
-					pthread_t pt;
-					int* tempPlayingKey = new int(i);
-					pthread_create(&pt, NULL, PlayPAWithThread, tempPlayingKey);
-					
-					// 直接呼叫playPA，速度有點慢，試試看用thread
-					//if(!(pid[i] = PlayPA(i)))
-					//	return 0;
+					PlayAlsaSHM(wavData[i], keyStartSet);
 				}
-				
 				keyPlaying[i] = true;
 			}
 			else{
@@ -183,17 +202,6 @@ int main(int argc, char **argv) {
 	// running
 	
 	bcm2835_close();
-	for(int i = 0; i < 48; i++){
-		string s = string("kill ") + to_string(pid[i]);
-		system(s.c_str());
-	}
-	if(shmdt(keyStartSet) < 0){
-		perror("shmdt");
-		return -1;
-	}
-	shmctl(shmid, IPC_RMID, NULL);
-	system("ipcs -m");
-	
 	return 0;
 }
 	
@@ -243,6 +251,91 @@ bool CheckKey(int key){
 	
 }
 
+int SetAlsa(int flag){
+	
+	
+	int fpid = fork();  
+    if (fpid < 0)  
+        printf("error in fork!");  
+    else if (fpid == 0)  {
+		
+		printf("process %d start!", flag); 
+		usleep(100000);
+		
+		/* share memory */
+		int shmid;
+		key_t key;
+		if((key = ftok(".", 1)) < 0){
+			printf("ftok error:%s\n", strerror(errno));
+			return -1;
+		}
+		
+		if((shmid = shmget(key, sizeof(KeyStartSet), SHM_R|SHM_W)) < 0){
+			printf("shmget error:%s\n", strerror(errno));
+			return -1;
+		}
+		
+		KeyStartSet* keyStartSet = NULL;
+		if((keyStartSet = (KeyStartSet*)shmat(shmid, NULL, 0)) == (void*)-1){
+			printf("shmat error:%s\n", strerror(errno));
+			return -1;
+		}
+		
+		/* alsa */
+		snd_pcm_t *handle;
+		
+		// Open the PCM output
+		int err = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
+		
+		// Configure parameters of PCM output
+		err = snd_pcm_set_params(handle,
+			SND_PCM_FORMAT_S16_LE,
+			SND_PCM_ACCESS_RW_INTERLEAVED,
+			NUM_CHANNELS,
+			SAMPLE_RATE,
+			0,			// Allow software resampling
+			50000);		// 0.05 seconds per buffer
+		
+		short silence[SILENCE_LENGTH];
+		for(int i = 0; i < SILENCE_LENGTH; i++)	// memset?
+			silence[i] = 0;
+			
+		short wavData[WAV_SIZE];
+		
+		/* loop */
+		
+		while(1){
+			
+			while(keyStartSet->ForkFlag  != flag 					|| 
+				  keyStartSet->QueueHead == keyStartSet->QueueTail  || 
+				  keyStartSet->QueueLock)
+				snd_pcm_writei(handle, silence, SILENCE_LENGTH);
+			
+			memcpy(wavData, keyStartSet->WavData[keyStartSet->QueueHead], sizeof(wavData));
+			
+			keyStartSet->QueueHead = keyStartSet->QueueHead == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueHead+1;
+			keyStartSet->ForkFlag++;
+		
+			snd_pcm_writei(handle, wavData, WAV_SIZE);
+		}
+		
+	}	
+    return fpid;
+}
+
+int PlayAlsaSHM(short* wavData, KeyStartSet* keyStartSet){
+	
+	keyStartSet->QueueLock = true;
+	
+	memcpy(keyStartSet->WavData[keyStartSet->QueueTail], wavData, sizeof(short) * WAV_SIZE);
+	
+	keyStartSet->QueueTail = keyStartSet->QueueTail == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueTail+1;
+	
+	keyStartSet->QueueLock = false;
+	
+	return 1;
+}
+
 int SetPA(int key){
 	
 	int pitch = key + 24;
@@ -270,6 +363,7 @@ int SetPA(int key){
 	}
     return fpid;  
 }
+
 
 int PlayPAWithThread(void* key){
 	
