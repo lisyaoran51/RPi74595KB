@@ -217,11 +217,16 @@ void Audio_playFile(snd_pcm_t *handle, wavedata_t *pWaveData)
 	// If anything is waiting to be written to screen, can be delayed unless flushed.
 	fflush(stdout);
 	printf("play!!!\n");
+	
+	unsigned char silence[800];
+	
+	
+	
 	// Write data and play sound (blocking)
 	snd_pcm_sframes_t frames = snd_pcm_writei(handle, pWaveData->pData, pWaveData->numSamples);
-	snd_pcm_drain(handle);
 	printf("wait\n");
-	usleep(1000000);
+	for(int i = 0; i < 100; i++)
+		frames = snd_pcm_writei(handle, silence, 400);
 	frames = snd_pcm_writei(handle, pWaveData->pData, pWaveData->numSamples);
 
 	// Check for errors
