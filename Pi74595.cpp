@@ -266,7 +266,7 @@ int SetAlsa(int flag){
     else if (fpid == 0)  {
 		
 		printf("process %d start!", flag); 
-		usleep(100000);
+		usleep(10000);
 		
 		/* share memory */
 		int shmid;
@@ -326,7 +326,6 @@ int SetAlsa(int flag){
 		}
 		
 	}	
-	printf("end fork #%d\n", flag); 
 	
     return fpid;
 }
