@@ -219,7 +219,7 @@ void Audio_playFile(snd_pcm_t *handle, wavedata_t *pWaveData)
 	printf("play!!!\n");
 	// Write data and play sound (blocking)
 	snd_pcm_sframes_t frames = snd_pcm_writei(handle, pWaveData->pData, pWaveData->numSamples);
-	//frames = snd_pcm_writei(handle, pWaveData->pData, pWaveData->numSamples);
+	frames = snd_pcm_writei(handle, pWaveData->pData, pWaveData->numSamples);
 
 	// Check for errors
 	if (frames < 0)
