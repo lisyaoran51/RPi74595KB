@@ -219,7 +219,8 @@ void Audio_playFile(snd_pcm_t *handle, wavedata_t *pWaveData)
 	printf("play!!!\n");
 	
 	unsigned char silence[800];
-	
+	for(int i = 0; i < 800; i++)
+		silence[i] = 128;
 	
 	
 	// Write data and play sound (blocking)
