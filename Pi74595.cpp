@@ -86,7 +86,7 @@ void Play(int key);
  
 void AplayString(string s, int key);
 
-int SetPA(int key);
+int SetAlsa(int key);
 int PlayPA(int key);
 int PlayPAWithThread(void* key); 
  
@@ -95,6 +95,12 @@ int main(int argc, char **argv) {
 	// 把thread址標清掉
 	handler = NULL;
 	KeyStartSet* keyStartSet = NULL;
+	
+	if(SetAlsa() == 0)
+		return 0;
+	
+	
+	
 	
 	// share memory
 	
