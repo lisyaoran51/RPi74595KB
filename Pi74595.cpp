@@ -48,6 +48,7 @@ SH_CP
 
 #define INPUT_PIN RPI_BPLUS_GPIO_J8_40 
 
+#define FORK_SIZE 5
 #define QUEUE_SIZE 8
 #define WAV_SIZE 8000
 #define KEY_SIZE 48
@@ -319,7 +320,7 @@ int SetAlsa(int flag){
 			memcpy(wavData, keyStartSet->WavData[keyStartSet->QueueHead], sizeof(wavData));
 			
 			keyStartSet->QueueHead = keyStartSet->QueueHead == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueHead+1;
-			keyStartSet->ForkFlag++;
+			keyStartSet->ForkFlag  = keyStartSet->ForkFlag  == FORK_SIZE-1  ?            0          : keyStartSet->ForkFlag+1;
 		
 			snd_pcm_writei(handle, wavData, WAV_SIZE);
 		}
