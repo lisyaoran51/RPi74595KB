@@ -15,7 +15,7 @@
 #include <thread>
 
 
-#include "paplay_8c.h"
+//#include "paplay_8c.h"
 #include <sys/shm.h>
 
 // https://github.com/mignev/shiftpi
@@ -47,6 +47,12 @@ SH_CP
 
 #define INPUT_PIN RPI_BPLUS_GPIO_J8_40 
 
+#define WAV_SIZE 8000
+
+struct KeyStartSet {
+    bool Start[KEY_SIZE];
+	short wavData[WAV_SIZE];
+};
 
 
 
@@ -77,7 +83,6 @@ SH_CP
 
 using namespace std;
 
-pthread_t* handler;
 
 
 bool CheckKey(int key);
@@ -93,14 +98,10 @@ int PlayPAWithThread(void* key);
 int main(int argc, char **argv) {
 	
 	// 把thread址標清掉
-	handler = NULL;
 	KeyStartSet* keyStartSet = NULL;
 	
 	if(SetAlsa() == 0)
 		return 0;
-	
-	
-	
 	
 	// share memory
 	
@@ -123,7 +124,7 @@ int main(int argc, char **argv) {
    
    // share memory
 	
-	// setup PA
+	// setup
 	
 	int pid[48];
 	
@@ -131,12 +132,8 @@ int main(int argc, char **argv) {
 	for(int i = 0; i < 48; i++) {
 		keyPlaying[i] = false;
 	}
-	for(int i = 0; i < 48; i++) {
-		if(!(pid[i] = SetPA(i)))
-			return 0;
-	}
 	
-	// setup PA
+	// setup
 	
 	// bcm2835
 	
