@@ -69,7 +69,7 @@ struct KeyStartSet {
 
 // get bcm2835
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
-// g++ Pi74595.cpp -o Pi74595 -lbcm2835 -pthread -lasound -fpermissive
+// g++ Pi74595.cpp -lbcm2835 -pthread -lasound -fpermissive
 
 // rm -f Pi74595 Pi74595.o paplay_8c.o
 // g++ -ggdb -Wall paplay_8c.c -c -o paplay_8c.o -I/home/pi/pulseaudio/src -L/home/pi/pulseaudio/src/.libs -lpulse -lsndfile -lpthread -fpermissive
@@ -110,11 +110,14 @@ int PlayPAWithThread(void* key);
  
 int main(int argc, char **argv) {
 	
+	printf("Start program\n");
 	/* fork幾個播音樂的程式 */
 	for(int i = 0; i < 5; i++){
 		if(SetAlsa(i) == 0)
 			return 0;
 	}
+	
+	printf("fork done\n");
 	
 	// share memory
 	
@@ -254,6 +257,7 @@ bool CheckKey(int key){
 
 int SetAlsa(int flag){
 	
+	printf("start fork #%d\n", flag); 
 	
 	int fpid = fork();  
     if (fpid < 0)  
