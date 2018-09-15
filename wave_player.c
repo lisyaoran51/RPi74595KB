@@ -119,13 +119,6 @@ int main(void)
 
 	printf("Done!\n");
 	
-	handle = Audio_openDevice();
-	Audio_playFile(handle, &sampleFile1);
-	snd_pcm_drain(handle);
-	snd_pcm_hw_free(handle);
-	snd_pcm_close(handle);
-	free(sampleFile1.pData);
-	
 	
 	
 	
@@ -218,6 +211,27 @@ void Audio_readWaveFileIntoMemory(char *fileName, wavedata_t *pWaveStruct)
 	fclose(file);
 }
 
+// Play the audio file (blocking)
+void Audio_playFile(snd_pcm_t *handle, wavedata_t *pWaveData)
+{
+	// If anything is waiting to be written to screen, can be delayed unless flushed.
+	fflush(stdout);
+	printf("play!!!\n");
+	// Write data and play sound (blocking)
+	snd_pcm_sframes_t frames = snd_pcm_writei(handle, pWaveData->pData, pWaveData->numSamples);
+	//frames = snd_pcm_writei(handle, pWaveData->pData, pWaveData->numSamples);
+
+	// Check for errors
+	if (frames < 0)
+		frames = snd_pcm_recover(handle, frames, 0);
+	if (frames < 0) {
+		fprintf(stderr, "ERROR: Failed writing audio with snd_pcm_writei(): %li\n", frames);
+		exit(EXIT_FAILURE);
+	}
+	if (frames > 0 && frames < pWaveData->numSamples)
+		printf("Short write (expected %d, wrote %li)\n", pWaveData->numSamples, frames);
+}
+
 // 一次播放好幾個音檔
 void Audio_playMultiFile(snd_pcm_t *handle, wavedata_t *pWaveData1,  wavedata_t *pWaveData2)
 {
@@ -243,26 +257,6 @@ void Audio_playMultiFile(snd_pcm_t *handle, wavedata_t *pWaveData1,  wavedata_t 
 }
 
 
-// Play the audio file (blocking)
-void Audio_playFile(snd_pcm_t *handle, wavedata_t *pWaveData)
-{
-	// If anything is waiting to be written to screen, can be delayed unless flushed.
-	fflush(stdout);
-	printf("play!!!\n");
-	// Write data and play sound (blocking)
-	snd_pcm_sframes_t frames = snd_pcm_writei(handle, pWaveData->pData, pWaveData->numSamples);
-	frames = snd_pcm_writei(handle, pWaveData->pData, pWaveData->numSamples);
-
-	// Check for errors
-	if (frames < 0)
-		frames = snd_pcm_recover(handle, frames, 0);
-	if (frames < 0) {
-		fprintf(stderr, "ERROR: Failed writing audio with snd_pcm_writei(): %li\n", frames);
-		exit(EXIT_FAILURE);
-	}
-	if (frames > 0 && frames < pWaveData->numSamples)
-		printf("Short write (expected %d, wrote %li)\n", pWaveData->numSamples, frames);
-}
 
 
 // Play the audio file (blocking)
