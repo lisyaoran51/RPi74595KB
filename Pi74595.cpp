@@ -264,12 +264,13 @@ bool CheckKey(int key){
 int SetAlsa(int flag){
 	
 	printf("start fork #%d\n", flag); 
+	printf("process %d start!", flag); 
 	
 	int fpid = fork();  
 	printf("fork return %d\n", fpid);
     if (fpid < 0)  
         printf("error in fork!");  
-    if (true)  {
+    if (fpid == 0)  {
 		
 		printf("process %d start!", flag); 
 		usleep(10000);
