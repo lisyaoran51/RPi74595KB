@@ -48,7 +48,7 @@ SH_CP
 
 #define INPUT_PIN RPI_BPLUS_GPIO_J8_40 
 
-#define FORK_SIZE 5
+#define FORK_SIZE 4
 #define QUEUE_SIZE 8
 #define WAV_SIZE 4000
 #define KEY_SIZE 48
@@ -322,7 +322,7 @@ int SetAlsa(int flag){
 			SND_PCM_ACCESS_RW_INTERLEAVED,
 			NUM_CHANNELS,
 			SAMPLE_RATE,
-			0,			// Allow software resampling
+			1,			// Allow software resampling
 			200000);		// 0.05 seconds per buffer
 		
 		short silence[SILENCE_LENGTH];
@@ -347,24 +347,24 @@ int SetAlsa(int flag){
 			keyStartSet->QueueHead = keyStartSet->QueueHead == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueHead+1;
 			keyStartSet->ForkFlag  = keyStartSet->ForkFlag  == FORK_SIZE-1  ?            0          : keyStartSet->ForkFlag+1;
 			
-			printf("receive play at %d\n", flag);
+			//printf("receive play at %d\n", flag);
 		
 			short* pointer = wavData;
 			snd_pcm_sframes_t frames;
 			snd_pcm_sframes_t totalFrames = 0;
 		
 			//snd_pcm_writei(handle, wavData, WAV_SIZE * sizeof(short));
-			while(totalFrames < WAV_SIZE){
+			while(totalFrames < WAV_SIZE / 2){
 				frames = snd_pcm_writei(handle, pointer, WAV_SIZE * sizeof(short) / 40);
 				if(frames < 0){
 					frames = snd_pcm_recover(handle, frames, 0);
 				}
 				totalFrames += frames;
 				pointer += frames;
-				printf("(wrote %li)", frames);
+				//printf("(wrote %li)", frames);
 			}
 			
-			printf("\n");
+			//printf("\n");
 		}
 		
 	}	
@@ -374,7 +374,7 @@ int SetAlsa(int flag){
 
 int PlayAlsaSHM(short* wavData, KeyStartSet* keyStartSet){
 	
-	printf("play!!\n");
+	//printf("play!!\n");
 	
 	keyStartSet->QueueLock = true;
 	
