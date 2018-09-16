@@ -66,7 +66,7 @@ struct KeyStartSet {
 
 #define SAMPLE_RATE   8000
 #define NUM_CHANNELS  1
-#define SILENCE_LENGTH 50
+#define SILENCE_LENGTH 200
 
 // get bcm2835
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
