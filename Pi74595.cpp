@@ -124,8 +124,6 @@ int main(int argc, char **argv) {
 			return 0;
 	}
 	
-	printf("fork done\n");
-	printf("size of keystartset %d\n", sizeof(KeyStartSet));
 	// share memory
 	
 	int shmid;
@@ -265,17 +263,13 @@ bool CheckKey(int key){
 
 int SetAlsa(int flag){
 	
-	printf("start fork #%d\n", flag); 
 	
 	int fpid = fork();  
     if (fpid < 0)  
         printf("error in fork!");  
     if (fpid == 0)  {
 		
-		for(int i = 0; i < 10; i++)
-			printf("process %d start!", flag); 
-		
-		printf("process %d start!\n", flag); 
+		usleep(100000);
 		/* share memory */
 		int shmid;
 		key_t key;
@@ -295,7 +289,6 @@ int SetAlsa(int flag){
 			return fpid;
 		}
 		
-		printf("start alsa #%d\n", flag);
 		/* alsa */
 		snd_pcm_t *handle;
 		
@@ -319,7 +312,6 @@ int SetAlsa(int flag){
 		
 		/* loop */
 		
-		printf("start loop #%d\n", flag);
 		while(1){
 			
 			while(keyStartSet->ForkFlag  != flag 					|| 
