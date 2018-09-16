@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
 	}
 	
 	printf("fork done\n");
-	
+	printf("size of keystartset %d\n", sizeof(KeyStartSet));
 	// share memory
 	
 	int shmid;
