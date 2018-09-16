@@ -355,7 +355,7 @@ int SetAlsa(int flag){
 		
 			//snd_pcm_writei(handle, wavData, WAV_SIZE * sizeof(short));
 			while(totalFrames < WAV_SIZE){
-				frames = snd_pcm_writei(handle, pointer, WAV_SIZE * sizeof(short) / 20);
+				frames = snd_pcm_writei(handle, pointer, WAV_SIZE * sizeof(short) / 40);
 				if(frames < 0){
 					frames = snd_pcm_recover(handle, frames, 0);
 				}
