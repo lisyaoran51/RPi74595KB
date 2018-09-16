@@ -326,6 +326,8 @@ int SetAlsa(int flag){
 				  keyStartSet->QueueLock)
 				snd_pcm_writei(handle, silence, SILENCE_LENGTH);
 			
+			printf("receive play at %d\n", flag);
+			
 			memcpy(wavData, keyStartSet->WavData[keyStartSet->QueueHead], sizeof(wavData));
 			
 			keyStartSet->QueueHead = keyStartSet->QueueHead == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueHead+1;
@@ -340,6 +342,8 @@ int SetAlsa(int flag){
 }
 
 int PlayAlsaSHM(short* wavData, KeyStartSet* keyStartSet){
+	
+	printf("play!!\n", flag);
 	
 	keyStartSet->QueueLock = true;
 	
