@@ -343,7 +343,7 @@ int SetAlsa(int flag){
 
 int PlayAlsaSHM(short* wavData, KeyStartSet* keyStartSet){
 	
-	printf("play!!\n", flag);
+	printf("play!!\n");
 	
 	keyStartSet->QueueLock = true;
 	
