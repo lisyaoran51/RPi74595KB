@@ -176,6 +176,10 @@ int main(int argc, char **argv) {
 	
 	while(totalFrames < WAV_SIZE){
 		frames = snd_pcm_writei(handle, pointer, WAV_SIZE - totalFrames);
+		if(frames < 0){
+			snd_pcm_recover(handle, frames, 0);
+			continue;
+		}
 		totalFrames += frames;
 		pointer += frames;
 		printf("(wrote %li)", frames);
