@@ -150,7 +150,7 @@ int main(int argc, char **argv) {
 	keyStartSet->QueueHead = 0;
 	keyStartSet->QueueTail = 0;
    
-   printf("SHM done\n");
+	printf("SHM done\n");
    // share memory
 	
 	// setup
@@ -294,6 +294,7 @@ int SetAlsa(int flag){
 			return fpid;
 		}
 		
+		printf("start alsa #%d\n", flag);
 		/* alsa */
 		snd_pcm_t *handle;
 		
@@ -317,6 +318,7 @@ int SetAlsa(int flag){
 		
 		/* loop */
 		
+		printf("start loop #%d\n", flag);
 		while(1){
 			
 			while(keyStartSet->ForkFlag  != flag 					|| 
