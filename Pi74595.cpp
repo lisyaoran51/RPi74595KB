@@ -177,7 +177,7 @@ int main(int argc, char **argv) {
 	while(totalFrames < WAV_SIZE){
 		frames = snd_pcm_writei(handle, pointer, WAV_SIZE - totalFrames);
 		if(frames < 0){
-			snd_pcm_recover(handle, frames, 0);
+			snd_pcm_recover(handle, frames, 1);
 			continue;
 		}
 		totalFrames += frames;
@@ -185,15 +185,6 @@ int main(int argc, char **argv) {
 		printf("(wrote %li)", frames);
 	}
 	
-	// Check for errors
-	if (frames < 0)
-		frames = snd_pcm_recover(handle, frames, 0);
-	if (frames < 0) {
-		fprintf(stderr, "ERROR: Failed writing audio with snd_pcm_writei(): %li\n", frames);
-		exit(EXIT_FAILURE);
-	}
-	if (frames > 0 && frames < WAV_SIZE)
-		printf("Short write (expected %d, wrote %li)\n", WAV_SIZE, frames);
 	
 	return 0;
 	
