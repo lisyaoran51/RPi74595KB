@@ -264,34 +264,31 @@ bool CheckKey(int key){
 int SetAlsa(int flag){
 	
 	printf("start fork #%d\n", flag); 
-	printf("process %d start!\n", flag); 
 	
 	int fpid = fork();  
-	printf("fork return %d\n", fpid);
     if (fpid < 0)  
         printf("error in fork!");  
     if (fpid == 0)  {
 		
-		printf("2process %d start!\n", flag); 
-		usleep(10000);
+		printf("process %d start!\n", flag); 
 		
 		/* share memory */
 		int shmid;
 		key_t key;
 		if((key = ftok(".", 1)) < 0){
 			printf("ftok error:%s\n", strerror(errno));
-			return -1;
+			return fpid;
 		}
 		
 		if((shmid = shmget(key, sizeof(KeyStartSet), SHM_R|SHM_W)) < 0){
 			printf("shmget error:%s\n", strerror(errno));
-			return -1;
+			return fpid;
 		}
 		
 		KeyStartSet* keyStartSet = NULL;
 		if((keyStartSet = (KeyStartSet*)shmat(shmid, NULL, 0)) == (void*)-1){
 			printf("shmat error:%s\n", strerror(errno));
-			return -1;
+			return fpid;
 		}
 		
 		/* alsa */
