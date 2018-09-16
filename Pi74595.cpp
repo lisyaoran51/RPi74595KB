@@ -264,7 +264,7 @@ bool CheckKey(int key){
 int SetAlsa(int flag){
 	
 	printf("start fork #%d\n", flag); 
-	printf("process %d start!", flag); 
+	printf("process %d start!\n", flag); 
 	
 	int fpid = fork();  
 	printf("fork return %d\n", fpid);
@@ -272,7 +272,7 @@ int SetAlsa(int flag){
         printf("error in fork!");  
     if (fpid == 0)  {
 		
-		printf("process %d start!", flag); 
+		printf("2process %d start!\n", flag); 
 		usleep(10000);
 		
 		/* share memory */
