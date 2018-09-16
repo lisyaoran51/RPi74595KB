@@ -95,7 +95,12 @@ struct KeyStartSet {
 
 using namespace std;
 
-
+int ffff(){
+	
+	int a = fork();
+	printf("fork return %d\n", a);
+	return a;
+}
 
 bool CheckKey(int key);
 
@@ -111,6 +116,11 @@ int PlayPAWithThread(void* key);
  
 int main(int argc, char **argv) {
 	printf("Start program\n");
+	
+	ffff();
+	ffff();
+	ffff();
+	return 0;
 	
 	/* fork幾個播音樂的程式 */
 	for(int i = 0; i < 5; i++){
