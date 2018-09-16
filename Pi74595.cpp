@@ -325,8 +325,10 @@ int SetAlsa(int flag){
 			
 			keyStartSet->QueueHead = keyStartSet->QueueHead == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueHead+1;
 			keyStartSet->ForkFlag  = keyStartSet->ForkFlag  == FORK_SIZE-1  ?            0          : keyStartSet->ForkFlag+1;
+			
+			printf("receive play at %d\n", flag);
 		
-			snd_pcm_writei(handle, wavData, WAV_SIZE * sizeof(short));
+			snd_pcm_writei(handle, wavData, WAV_SIZE);
 			
 		}
 		
