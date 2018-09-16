@@ -162,7 +162,7 @@ int main(int argc, char **argv) {
 		
 		int pitch = i + 24;
 		
-		string s = string("Audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
+		string s = string("mono_audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
 		
 		FILE *file = fopen(s.c_str(), "r");
 		if (file == NULL) {
@@ -315,6 +315,20 @@ int SetAlsa(int flag){
 			silence[i] = 0;
 			
 		short wavData[WAV_SIZE];
+		
+		string s = string("Audio/German_Concert_D_0") + to_string(38) + string("_083.wav");
+		
+		FILE *file = fopen(s.c_str(), "r");
+		if (file == NULL) {
+			fprintf(stderr, "ERROR: Unable to open file %s.\n", s.c_str());
+			exit(EXIT_FAILURE);
+		}
+		
+		fseek(file, 44, SEEK_SET);	// header 44 byte
+		fread(wavData[i], sizeof(short), WAV_SIZE, file);
+		
+		fclose(file);
+		
 		
 		/* loop */
 		
