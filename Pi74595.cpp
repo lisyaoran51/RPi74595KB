@@ -50,7 +50,7 @@ SH_CP
 
 #define FORK_SIZE 5
 #define QUEUE_SIZE 8
-#define WAV_SIZE 8000
+#define WAV_SIZE 4000
 #define KEY_SIZE 48
 
 struct KeyStartSet {
