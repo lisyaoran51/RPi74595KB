@@ -289,6 +289,27 @@ int SetAlsa(int flag){
 			return fpid;
 		}
 		
+		/* setup 
+		short wavDataM[KEY_SIZE][WAV_SIZE];
+		for(int i = 0; i < 48; i++) {
+			
+			int pitch = i + 24;
+			
+			string s = string("mono_audio/German_Concert_D_0") + to_string(pitch+21-9) + string("_083.wav");
+			
+			FILE *file = fopen(s.c_str(), "r");
+			if (file == NULL) {
+				fprintf(stderr, "ERROR: Unable to open file %s.\n", s.c_str());
+				exit(EXIT_FAILURE);
+			}
+			
+			fseek(file, 78, SEEK_SET);	// header 44 byte
+			fread(wavDataM[i], sizeof(short), WAV_SIZE, file);
+			
+			fclose(file);
+		}
+		/* setup */
+		
 		/* alsa */
 		snd_pcm_t *handle;
 		
