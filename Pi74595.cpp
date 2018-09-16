@@ -157,7 +157,7 @@ int main(int argc, char **argv) {
 	
 	// Configure parameters of PCM output
 	err = snd_pcm_set_params(handle,
-		SND_PCM_FORMAT_S8,
+		SND_PCM_FORMAT_S16_LE,
 		SND_PCM_ACCESS_RW_INTERLEAVED,
 		NUM_CHANNELS,
 		SAMPLE_RATE,
@@ -170,7 +170,15 @@ int main(int argc, char **argv) {
 	
 	fflush(stdout);
 	
-	snd_pcm_sframes_t frames = snd_pcm_writei(handle, wavData1, WAV_SIZE);
+	char* pointer = wavData1;
+	snd_pcm_sframes_t frames;
+	snd_pcm_sframes_t totalFrames = 0;
+	
+	while(totalFrames < WAV_SIZE){
+		frames = snd_pcm_writei(handle, pointer, WAV_SIZE - totalFrames);
+		totalFrames += frames;
+		pointer += frames;
+	}
 	
 	// Check for errors
 	if (frames < 0)
