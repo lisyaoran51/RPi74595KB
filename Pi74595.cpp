@@ -234,9 +234,9 @@ bool CheckKey(int key){
 				//usleep(1000);
 				bcm2835_gpio_write(DI_PIN, j == highBit ? HIGH : LOW);
 				//usleep(1000);
-				bcm2835_gpio_write(CL_PIN, LOW);
-				//usleep(1000);
 				bcm2835_gpio_write(CL_PIN, HIGH);
+				//usleep(1000);
+				bcm2835_gpio_write(CL_PIN, LOW);
 			}
 		}
 		else{
@@ -244,9 +244,9 @@ bool CheckKey(int key){
 				//usleep(1000);
 				bcm2835_gpio_write(DI_PIN, LOW);
 				//usleep(1000);
-				bcm2835_gpio_write(CL_PIN, LOW);
-				//usleep(1000);
 				bcm2835_gpio_write(CL_PIN, HIGH);
+				//usleep(1000);
+				bcm2835_gpio_write(CL_PIN, LOW);
 			}
 		}
 	}
