@@ -170,7 +170,7 @@ int main(int argc, char **argv) {
 	
 	fflush(stdout);
 	
-	snd_pcm_sframes_t frames = snd_pcm_writen(handle, wavData1, WAV_SIZE);
+	snd_pcm_sframes_t frames = snd_pcm_writei(handle, wavData1, WAV_SIZE);
 	
 	// Check for errors
 	if (frames < 0)
