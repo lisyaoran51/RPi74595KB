@@ -123,7 +123,7 @@ int main(int argc, char **argv) {
 	for(int i = 0; i < SILENCE_LENGTH; i++)	// memset?
 		silence[i] = 0;
 		
-	char wavData1[WAV_SIZE];
+	short wavData1[WAV_SIZE];
 	
 	string s = string("mono_audio/German_Concert_D_0") + to_string(38) + string("_083.wav");
 	
@@ -138,7 +138,7 @@ int main(int argc, char **argv) {
 	printf("size of file %d\n", sizeInBytes);
 	
 	fseek(file, 78, SEEK_SET);	// header 44 byte
-	int samplesRead = fread(wavData1, sizeof(char), WAV_SIZE, file);
+	int samplesRead = fread(wavData1, sizeof(short), WAV_SIZE, file);
 	printf("samples read %d\n", samplesRead);
 	
 	fclose(file);
@@ -170,7 +170,7 @@ int main(int argc, char **argv) {
 	
 	fflush(stdout);
 	
-	char* pointer = wavData1;
+	short* pointer = wavData1;
 	snd_pcm_sframes_t frames;
 	snd_pcm_sframes_t totalFrames = 0;
 	
