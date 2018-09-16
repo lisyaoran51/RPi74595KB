@@ -168,8 +168,6 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	}
 	
-	fflush(stdout);
-	
 	short* pointer = wavData1;
 	snd_pcm_sframes_t frames;
 	snd_pcm_sframes_t totalFrames = 0;
@@ -177,7 +175,7 @@ int main(int argc, char **argv) {
 	while(totalFrames < WAV_SIZE){
 		frames = snd_pcm_writei(handle, pointer, WAV_SIZE - totalFrames);
 		if(frames < 0){
-			frames = snd_pcm_recover(handle, frames, 1);
+			frames = snd_pcm_recover(handle, frames, 0);
 		}
 		totalFrames += frames;
 		pointer += frames;
