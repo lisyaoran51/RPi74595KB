@@ -143,8 +143,6 @@ int main(int argc, char **argv) {
 	
 	fclose(file);
 	
-	for(int i = 0; i < WAV_SIZE; i++)
-		printf("%d ", wavData1[i]);
 	
 	snd_pcm_t *handle;
 		
@@ -173,7 +171,7 @@ int main(int argc, char **argv) {
 	snd_pcm_sframes_t totalFrames = 0;
 	
 	while(totalFrames < WAV_SIZE){
-		frames = snd_pcm_writei(handle, pointer, WAV_SIZE - totalFrames);
+		frames = snd_pcm_writei(handle, pointer, WAV_SIZE * sizeof(short));
 		if(frames < 0){
 			frames = snd_pcm_recover(handle, frames, 0);
 		}
@@ -181,7 +179,6 @@ int main(int argc, char **argv) {
 		pointer += frames;
 		printf("(wrote %li)", frames);
 	}
-	
 	
 	return 0;
 	
