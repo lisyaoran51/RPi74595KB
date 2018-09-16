@@ -159,6 +159,8 @@ int main(int argc, char **argv) {
 		0,			// Allow software resampling
 		50000);		// 0.05 seconds per buffer
 	
+	fflush(stdout);
+	
 	snd_pcm_sframes_t frames = snd_pcm_writei(handle, wavData1, WAV_SIZE);
 	
 	// Check for errors
