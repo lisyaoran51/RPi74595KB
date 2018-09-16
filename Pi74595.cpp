@@ -151,7 +151,7 @@ int main(int argc, char **argv) {
 	int sizeInBytes = ftell(file);
 	printf("size of file %d\n", sizeInBytes);
 	
-	fseek(file, 44, SEEK_SET);	// header 44 byte
+	fseek(file, 78, SEEK_SET);	// header 44 byte
 	fread(wavData1, sizeof(short), WAV_SIZE, file);
 	
 	fclose(file);
