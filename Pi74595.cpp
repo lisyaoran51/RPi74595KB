@@ -270,8 +270,10 @@ int SetAlsa(int flag){
         printf("error in fork!");  
     if (fpid == 0)  {
 		
-		printf("process %d start!\n", flag); 
+		for(int i = 0; i < 10; i++)
+			printf("process %d start!", flag); 
 		
+		printf("process %d start!\n", flag); 
 		/* share memory */
 		int shmid;
 		key_t key;
