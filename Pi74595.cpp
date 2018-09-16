@@ -322,8 +322,8 @@ int SetAlsa(int flag){
 			SND_PCM_ACCESS_RW_INTERLEAVED,
 			NUM_CHANNELS,
 			SAMPLE_RATE,
-			1,			// Allow software resampling
-			100000);		// 0.05 seconds per buffer
+			0,			// Allow software resampling
+			500000);		// 0.05 seconds per buffer
 		
 		short silence[SILENCE_LENGTH];
 		for(int i = 0; i < SILENCE_LENGTH; i++)	// memset?
