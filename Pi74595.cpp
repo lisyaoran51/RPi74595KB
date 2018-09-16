@@ -119,20 +119,6 @@ int main(int argc, char **argv) {
 	
 	
 	
-	snd_pcm_t *handle;
-		
-	// Open the PCM output
-	int err = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
-	
-	// Configure parameters of PCM output
-	err = snd_pcm_set_params(handle,
-		SND_PCM_FORMAT_S16_LE,
-		SND_PCM_ACCESS_RW_INTERLEAVED,
-		NUM_CHANNELS,
-		SAMPLE_RATE,
-		0,			// Allow software resampling
-		50000);		// 0.05 seconds per buffer
-	
 	short silence[SILENCE_LENGTH];
 	for(int i = 0; i < SILENCE_LENGTH; i++)	// memset?
 		silence[i] = 0;
@@ -155,6 +141,24 @@ int main(int argc, char **argv) {
 	fread(wavData1, sizeof(short), WAV_SIZE, file);
 	
 	fclose(file);
+	
+	for(int i = 0; i < WAV_SIZE; i++)
+		printf("%d ", wavData1[i]);
+	
+	snd_pcm_t *handle;
+		
+	// Open the PCM output
+	int err = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
+	
+	// Configure parameters of PCM output
+	err = snd_pcm_set_params(handle,
+		SND_PCM_FORMAT_S16_LE,
+		SND_PCM_ACCESS_RW_INTERLEAVED,
+		NUM_CHANNELS,
+		SAMPLE_RATE,
+		0,			// Allow software resampling
+		50000);		// 0.05 seconds per buffer
+	
 	snd_pcm_sframes_t frames = snd_pcm_writei(handle, wavData1, WAV_SIZE);
 	
 	// Check for errors
