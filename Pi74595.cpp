@@ -117,6 +117,49 @@ int PlayPAWithThread(void* key);
 int main(int argc, char **argv) {
 	printf("Start program\n");
 	
+	
+	
+	snd_pcm_t *handle;
+		
+	// Open the PCM output
+	int err = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
+	
+	// Configure parameters of PCM output
+	err = snd_pcm_set_params(handle,
+		SND_PCM_FORMAT_S16_LE,
+		SND_PCM_ACCESS_RW_INTERLEAVED,
+		NUM_CHANNELS,
+		SAMPLE_RATE,
+		0,			// Allow software resampling
+		50000);		// 0.05 seconds per buffer
+	
+	short silence[SILENCE_LENGTH];
+	for(int i = 0; i < SILENCE_LENGTH; i++)	// memset?
+		silence[i] = 0;
+		
+	short wavData1[WAV_SIZE];
+	
+	string s = string("mono_audio/German_Concert_D_0") + to_string(38) + string("_083.wav");
+	
+	FILE *file = fopen(s.c_str(), "r");
+	if (file == NULL) {
+		fprintf(stderr, "ERROR: Unable to open file %s.\n", s.c_str());
+		exit(EXIT_FAILURE);
+	}
+	
+	fseek(file, 44, SEEK_SET);	// header 44 byte
+	fread(wavData1, sizeof(short), WAV_SIZE, file);
+	
+	fclose(file);
+	snd_pcm_writei(handle, wavData1, WAV_SIZE);
+	
+	return 0;
+	
+	
+	
+	
+	
+	
 	/* fork幾個播音樂的程式 */
 	for(int i = 0; i < 5; i++){
 		if(SetAlsa(i) == 0)
