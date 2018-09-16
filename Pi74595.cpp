@@ -349,6 +349,10 @@ int SetAlsa(int flag){
 			
 			printf("receive play at %d\n", flag);
 		
+			short* pointer = wavData;
+			snd_pcm_sframes_t frames;
+			snd_pcm_sframes_t totalFrames = 0;
+		
 			//snd_pcm_writei(handle, wavData, WAV_SIZE * sizeof(short));
 			while(totalFrames < WAV_SIZE){
 				frames = snd_pcm_writei(handle, pointer, WAV_SIZE * sizeof(short));
