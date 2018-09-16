@@ -330,6 +330,8 @@ int SetAlsa(int flag){
 			
 			memcpy(wavData, keyStartSet->WavData[keyStartSet->QueueHead], sizeof(wavData));
 			
+			printf("send data: %d %d %d %d %d %d %d %d\n", wavData[0], wavData[1], wavData[2], wavData[3], wavData[4], wavData[5], wavData[6], wavData[7]);
+			
 			keyStartSet->QueueHead = keyStartSet->QueueHead == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueHead+1;
 			keyStartSet->ForkFlag  = keyStartSet->ForkFlag  == FORK_SIZE-1  ?            0          : keyStartSet->ForkFlag+1;
 		
@@ -348,6 +350,8 @@ int PlayAlsaSHM(short* wavData, KeyStartSet* keyStartSet){
 	keyStartSet->QueueLock = true;
 	
 	memcpy(keyStartSet->WavData[keyStartSet->QueueTail], wavData, sizeof(short) * WAV_SIZE);
+	
+	printf("send data: %d %d %d %d %d %d %d %d\n", wavData[0], wavData[1], wavData[2], wavData[3], wavData[4], wavData[5], wavData[6], wavData[7]);
 	
 	keyStartSet->QueueTail = keyStartSet->QueueTail == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueTail+1;
 	
