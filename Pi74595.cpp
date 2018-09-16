@@ -349,7 +349,7 @@ int SetAlsa(int flag){
 			
 			printf("receive play at %d\n", flag);
 		
-			snd_pcm_writei(handle, wavData, WAV_SIZE);
+			snd_pcm_writei(handle, wavData, WAV_SIZE * sizeof(short));
 			
 		}
 		
