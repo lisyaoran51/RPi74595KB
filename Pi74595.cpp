@@ -123,7 +123,7 @@ int main(int argc, char **argv) {
 	for(int i = 0; i < SILENCE_LENGTH; i++)	// memset?
 		silence[i] = 0;
 		
-	short wavData1[WAV_SIZE];
+	short wavData1[WAV_SIZE/2];
 	
 	string s = string("mono_audio/German_Concert_D_0") + to_string(38) + string("_083.wav");
 	
@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
 	
 	fclose(file);
 	
-	for(int i = 0; i < WAV_SIZE; i++)
+	for(int i = 0; i < WAV_SIZE/2; i++)
 		printf("%d ", wavData1[i]);
 	
 	snd_pcm_t *handle;
@@ -159,7 +159,7 @@ int main(int argc, char **argv) {
 		0,			// Allow software resampling
 		50000);		// 0.05 seconds per buffer
 	
-	snd_pcm_sframes_t frames = snd_pcm_writei(handle, wavData1, WAV_SIZE);
+	snd_pcm_sframes_t frames = snd_pcm_writei(handle, wavData1, WAV_SIZE/2);
 	
 	// Check for errors
 	if (frames < 0)
@@ -168,8 +168,8 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "ERROR: Failed writing audio with snd_pcm_writei(): %li\n", frames);
 		exit(EXIT_FAILURE);
 	}
-	if (frames > 0 && frames < WAV_SIZE)
-		printf("Short write (expected %d, wrote %li)\n", WAV_SIZE, frames);
+	if (frames > 0 && frames < WAV_SIZE/2)
+		printf("Short write (expected %d, wrote %li)\n", WAV_SIZE/2, frames);
 	
 	return 0;
 	
