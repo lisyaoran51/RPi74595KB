@@ -161,8 +161,8 @@ int main(int argc, char **argv) {
 		SND_PCM_ACCESS_RW_INTERLEAVED,
 		NUM_CHANNELS,
 		SAMPLE_RATE,
-		0,			// Allow software resampling
-		50000);		// 0.05 seconds per buffer
+		1,			// Allow software resampling
+		500000);		// 0.05 seconds per buffer
 	if (err < 0) {
 		printf("Play-back configuration error: %s\n", snd_strerror(err));
 		exit(EXIT_FAILURE);
