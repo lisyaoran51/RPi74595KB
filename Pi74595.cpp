@@ -266,7 +266,7 @@ int SetAlsa(int flag){
 	
 	printf("start fork #%d\n", flag); 
 	
-	int fpid = fork();  
+	static int fpid = fork();  
     if (fpid < 0)  
         printf("error in fork!");  
     else if (fpid == 0)  {
