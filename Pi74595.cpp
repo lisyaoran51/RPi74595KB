@@ -150,6 +150,7 @@ int main(int argc, char **argv) {
 	keyStartSet->QueueHead = 0;
 	keyStartSet->QueueTail = 0;
    
+   printf("SHM done\n");
    // share memory
 	
 	// setup
