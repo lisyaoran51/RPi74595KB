@@ -316,7 +316,7 @@ int SetAlsa(int flag){
 			
 		short wavData[WAV_SIZE];
 		
-		string s = string("Audio/German_Concert_D_0") + to_string(38) + string("_083.wav");
+		string s = string("mono_audio/German_Concert_D_0") + to_string(38) + string("_083.wav");
 		
 		FILE *file = fopen(s.c_str(), "r");
 		if (file == NULL) {
@@ -325,10 +325,10 @@ int SetAlsa(int flag){
 		}
 		
 		fseek(file, 44, SEEK_SET);	// header 44 byte
-		fread(wavData[i], sizeof(short), WAV_SIZE, file);
+		fread(wavData, sizeof(short), WAV_SIZE, file);
 		
 		fclose(file);
-		
+		snd_pcm_writei(handle, wavData, WAV_SIZE);
 		
 		/* loop */
 		
