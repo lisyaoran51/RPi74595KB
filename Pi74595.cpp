@@ -112,6 +112,12 @@ int PlayPAWithThread(void* key);
 int main(int argc, char **argv) {
 	printf("Start program\n");
 	
+	if(!fork()){
+		printf("child process\n");
+		while(1);
+	}
+	return 0;
+	
 	/* fork幾個播音樂的程式 */
 	for(int i = 0; i < 5; i++){
 		if(SetAlsa(i) == 0)
