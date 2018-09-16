@@ -117,11 +117,6 @@ int PlayPAWithThread(void* key);
 int main(int argc, char **argv) {
 	printf("Start program\n");
 	
-	ffff();
-	ffff();
-	ffff();
-	return 0;
-	
 	/* fork幾個播音樂的程式 */
 	for(int i = 0; i < 5; i++){
 		if(SetAlsa(i) == 0)
@@ -270,8 +265,8 @@ int SetAlsa(int flag){
 	
 	printf("start fork #%d\n", flag); 
 	
-	static int fpid = 0;
-	fpid = fork();  
+	int fpid = fork();  
+	printf("fork return %d\n", fpid);
     if (fpid < 0)  
         printf("error in fork!");  
     else if (fpid == 0)  {
