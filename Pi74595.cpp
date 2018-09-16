@@ -157,7 +157,7 @@ int main(int argc, char **argv) {
 	
 	// Configure parameters of PCM output
 	err = snd_pcm_set_params(handle,
-		SND_PCM_FORMAT_S16_LE,
+		SND_PCM_FORMAT_S8,
 		SND_PCM_ACCESS_RW_INTERLEAVED,
 		NUM_CHANNELS,
 		SAMPLE_RATE,
