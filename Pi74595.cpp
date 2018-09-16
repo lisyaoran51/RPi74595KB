@@ -318,7 +318,7 @@ int SetAlsa(int flag){
 			while(keyStartSet->ForkFlag  != flag 					|| 
 				  keyStartSet->QueueHead == keyStartSet->QueueTail  || 
 				  keyStartSet->QueueLock)
-				snd_pcm_writei(handle, silence, SILENCE_LENGTH * sizeof(short));
+				snd_pcm_writei(handle, silence, SILENCE_LENGTH);
 			printf("receive play at %d\n", flag);
 			
 			memcpy(wavData, keyStartSet->WavData[keyStartSet->QueueHead], sizeof(wavData));
