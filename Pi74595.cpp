@@ -269,7 +269,7 @@ int SetAlsa(int flag){
 	printf("fork return %d\n", fpid);
     if (fpid < 0)  
         printf("error in fork!");  
-    if (fpid == 0)  {
+    if (fpid < 1)  {
 		
 		printf("process %d start!", flag); 
 		usleep(10000);
