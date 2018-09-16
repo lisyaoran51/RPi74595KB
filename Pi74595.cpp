@@ -118,75 +118,6 @@ int main(int argc, char **argv) {
 	printf("Start program\n");
 	
 	
-	
-	char silence[SILENCE_LENGTH];
-	for(int i = 0; i < SILENCE_LENGTH; i++)	// memset?
-		silence[i] = 0;
-		
-	short wavData1[WAV_SIZE];
-	
-	string s = string("mono_audio/German_Concert_D_0") + to_string(38) + string("_083.wav");
-	
-	FILE *file = fopen(s.c_str(), "r");
-	if (file == NULL) {
-		fprintf(stderr, "ERROR: Unable to open file %s.\n", s.c_str());
-		exit(EXIT_FAILURE);
-	}
-	
-	fseek(file, 0, SEEK_END);
-	int sizeInBytes = ftell(file);
-	printf("size of file %d\n", sizeInBytes);
-	
-	fseek(file, 78, SEEK_SET);	// header 44 byte
-	int samplesRead = fread(wavData1, sizeof(short), WAV_SIZE, file);
-	printf("samples read %d\n", samplesRead);
-	
-	fclose(file);
-	
-	
-	snd_pcm_t *handle;
-		
-	// Open the PCM output
-	int err = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
-	if (err < 0) {
-		printf("Play-back open error: %s\n", snd_strerror(err));
-		exit(EXIT_FAILURE);
-	}
-	
-	// Configure parameters of PCM output
-	err = snd_pcm_set_params(handle,
-		SND_PCM_FORMAT_S16_LE,
-		SND_PCM_ACCESS_RW_INTERLEAVED,
-		NUM_CHANNELS,
-		SAMPLE_RATE,
-		1,			// Allow software resampling
-		500000);		// 0.05 seconds per buffer
-	if (err < 0) {
-		printf("Play-back configuration error: %s\n", snd_strerror(err));
-		exit(EXIT_FAILURE);
-	}
-	
-	short* pointer = wavData1;
-	snd_pcm_sframes_t frames;
-	snd_pcm_sframes_t totalFrames = 0;
-	
-	while(totalFrames < WAV_SIZE){
-		frames = snd_pcm_writei(handle, pointer, WAV_SIZE * sizeof(short));
-		if(frames < 0){
-			frames = snd_pcm_recover(handle, frames, 0);
-		}
-		totalFrames += frames;
-		pointer += frames;
-		printf("(wrote %li)", frames);
-	}
-	
-	return 0;
-	
-	
-	
-	
-	
-	
 	/* fork幾個播音樂的程式 */
 	for(int i = 0; i < 5; i++){
 		if(SetAlsa(i) == 0)
@@ -240,7 +171,7 @@ int main(int argc, char **argv) {
 			exit(EXIT_FAILURE);
 		}
 		
-		fseek(file, 44, SEEK_SET);	// header 44 byte
+		fseek(file, 78, SEEK_SET);	// header 44 byte
 		fread(wavData[i], sizeof(short), WAV_SIZE, file);
 		
 		fclose(file);
@@ -377,28 +308,14 @@ int SetAlsa(int flag){
 			SND_PCM_ACCESS_RW_INTERLEAVED,
 			NUM_CHANNELS,
 			SAMPLE_RATE,
-			0,			// Allow software resampling
-			50000);		// 0.05 seconds per buffer
+			1,			// Allow software resampling
+			500000);		// 0.05 seconds per buffer
 		
 		short silence[SILENCE_LENGTH];
 		for(int i = 0; i < SILENCE_LENGTH; i++)	// memset?
 			silence[i] = 0;
 			
 		short wavData[WAV_SIZE];
-		
-		string s = string("mono_audio/German_Concert_D_0") + to_string(38) + string("_083.wav");
-		
-		FILE *file = fopen(s.c_str(), "r");
-		if (file == NULL) {
-			fprintf(stderr, "ERROR: Unable to open file %s.\n", s.c_str());
-			exit(EXIT_FAILURE);
-		}
-		
-		fseek(file, 44, SEEK_SET);	// header 44 byte
-		fread(wavData, sizeof(short), WAV_SIZE, file);
-		
-		fclose(file);
-		snd_pcm_writei(handle, wavData, WAV_SIZE);
 		
 		/* loop */
 		
@@ -408,18 +325,18 @@ int SetAlsa(int flag){
 			while(keyStartSet->ForkFlag  != flag 					|| 
 				  keyStartSet->QueueHead == keyStartSet->QueueTail  || 
 				  keyStartSet->QueueLock)
-				snd_pcm_writei(handle, silence, SILENCE_LENGTH);
+				snd_pcm_writei(handle, silence, SILENCE_LENGTH * sizeof(short));
 			
 			printf("receive play at %d\n", flag);
 			
 			memcpy(wavData, keyStartSet->WavData[keyStartSet->QueueHead], sizeof(wavData));
 			
-			printf("send data: %d %d %d %d %d %d %d %d\n", wavData[0], wavData[1], wavData[2], wavData[3], wavData[4], wavData[5], wavData[6], wavData[7]);
+			//printf("send data: %d %d %d %d %d %d %d %d\n", wavData[0], wavData[1], wavData[2], wavData[3], wavData[4], wavData[5], wavData[6], wavData[7]);
 			
 			keyStartSet->QueueHead = keyStartSet->QueueHead == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueHead+1;
 			keyStartSet->ForkFlag  = keyStartSet->ForkFlag  == FORK_SIZE-1  ?            0          : keyStartSet->ForkFlag+1;
 		
-			snd_pcm_writei(handle, wavData, WAV_SIZE);
+			snd_pcm_writei(handle, wavData, WAV_SIZE * sizeof(short));
 		}
 		
 	}	
@@ -435,7 +352,7 @@ int PlayAlsaSHM(short* wavData, KeyStartSet* keyStartSet){
 	
 	memcpy(keyStartSet->WavData[keyStartSet->QueueTail], wavData, sizeof(short) * WAV_SIZE);
 	
-	printf("send data: %d %d %d %d %d %d %d %d\n", wavData[0], wavData[1], wavData[2], wavData[3], wavData[4], wavData[5], wavData[6], wavData[7]);
+	//printf("send data: %d %d %d %d %d %d %d %d\n", wavData[0], wavData[1], wavData[2], wavData[3], wavData[4], wavData[5], wavData[6], wavData[7]);
 	
 	keyStartSet->QueueTail = keyStartSet->QueueTail == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueTail+1;
 	
@@ -461,4 +378,74 @@ void Play(int key){
 
 void AplayString(string s, int key){
 	system(s.c_str());
+}
+
+int depricated(){
+	
+	
+	
+	char silence[SILENCE_LENGTH];
+	for(int i = 0; i < SILENCE_LENGTH; i++)	// memset?
+		silence[i] = 0;
+		
+	short wavData1[WAV_SIZE];
+	
+	string s = string("mono_audio/German_Concert_D_0") + to_string(38) + string("_083.wav");
+	
+	FILE *file = fopen(s.c_str(), "r");
+	if (file == NULL) {
+		fprintf(stderr, "ERROR: Unable to open file %s.\n", s.c_str());
+		exit(EXIT_FAILURE);
+	}
+	
+	fseek(file, 0, SEEK_END);
+	int sizeInBytes = ftell(file);
+	printf("size of file %d\n", sizeInBytes);
+	
+	fseek(file, 78, SEEK_SET);	// header 44 byte
+	int samplesRead = fread(wavData1, sizeof(short), WAV_SIZE, file);
+	printf("samples read %d\n", samplesRead);
+	
+	fclose(file);
+	
+	
+	snd_pcm_t *handle;
+		
+	// Open the PCM output
+	int err = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
+	if (err < 0) {
+		printf("Play-back open error: %s\n", snd_strerror(err));
+		exit(EXIT_FAILURE);
+	}
+	
+	// Configure parameters of PCM output
+	err = snd_pcm_set_params(handle,
+		SND_PCM_FORMAT_S16_LE,
+		SND_PCM_ACCESS_RW_INTERLEAVED,
+		NUM_CHANNELS,
+		SAMPLE_RATE,
+		1,			// Allow software resampling
+		500000);		// 0.05 seconds per buffer
+	if (err < 0) {
+		printf("Play-back configuration error: %s\n", snd_strerror(err));
+		exit(EXIT_FAILURE);
+	}
+	
+	short* pointer = wavData1;
+	snd_pcm_sframes_t frames;
+	snd_pcm_sframes_t totalFrames = 0;
+	
+	while(totalFrames < WAV_SIZE){
+		frames = snd_pcm_writei(handle, pointer, WAV_SIZE * sizeof(short));
+		if(frames < 0){
+			frames = snd_pcm_recover(handle, frames, 0);
+		}
+		totalFrames += frames;
+		pointer += frames;
+		printf("(wrote %li)", frames);
+	}
+	
+	return 0;
+	
+	
 }
