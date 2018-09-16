@@ -323,7 +323,7 @@ int SetAlsa(int flag){
 			NUM_CHANNELS,
 			SAMPLE_RATE,
 			1,			// Allow software resampling
-			50000);		// 0.05 seconds per buffer
+			100000);		// 0.05 seconds per buffer
 		
 		short silence[SILENCE_LENGTH];
 		for(int i = 0; i < SILENCE_LENGTH; i++)	// memset?
