@@ -66,7 +66,7 @@ struct KeyStartSet {
 
 #define SAMPLE_RATE   8000
 #define NUM_CHANNELS  1
-#define SILENCE_LENGTH 100
+#define SILENCE_LENGTH 50
 
 // get bcm2835
 // http://www.raspberry-projects.com/pi/programming-in-c/io-pins/bcm2835-by-mike-mccauley
@@ -323,7 +323,7 @@ int SetAlsa(int flag){
 			NUM_CHANNELS,
 			SAMPLE_RATE,
 			0,			// Allow software resampling
-			500000);		// 0.05 seconds per buffer
+			50000);		// 0.05 seconds per buffer
 		
 		short silence[SILENCE_LENGTH];
 		for(int i = 0; i < SILENCE_LENGTH; i++)	// memset?
@@ -339,7 +339,7 @@ int SetAlsa(int flag){
 			while(keyStartSet->ForkFlag  != flag 					|| 
 				  keyStartSet->QueueHead == keyStartSet->QueueTail  || 
 				  keyStartSet->QueueLock)
-				snd_pcm_writei(handle, silence, SILENCE_LENGTH);
+				snd_pcm_writei(handle, silence, SILENCE_LENGTH * sizeof(short));
 			printf("receive play at %d\n", flag);
 			
 			memcpy(wavData, keyStartSet->WavData[keyStartSet->QueueHead], sizeof(wavData));
@@ -355,7 +355,7 @@ int SetAlsa(int flag){
 		
 			//snd_pcm_writei(handle, wavData, WAV_SIZE * sizeof(short));
 			while(totalFrames < WAV_SIZE){
-				frames = snd_pcm_writei(handle, pointer, WAV_SIZE * sizeof(short) / 10);
+				frames = snd_pcm_writei(handle, pointer, WAV_SIZE * sizeof(short) / 20);
 				if(frames < 0){
 					frames = snd_pcm_recover(handle, frames, 0);
 				}
