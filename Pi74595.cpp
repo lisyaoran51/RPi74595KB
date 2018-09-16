@@ -364,6 +364,7 @@ int SetAlsa(int flag){
 				printf("(wrote %li)", frames);
 			}
 			
+			printf("\n");
 		}
 		
 	}	
