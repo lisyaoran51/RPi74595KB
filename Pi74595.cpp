@@ -147,6 +147,7 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	}
 	
+	fseek(file, 0, SEEK_END);
 	int sizeInBytes = ftell(file);
 	printf("size of file %d\n", sizeInBytes);
 	
