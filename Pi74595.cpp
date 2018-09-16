@@ -138,7 +138,8 @@ int main(int argc, char **argv) {
 	printf("size of file %d\n", sizeInBytes);
 	
 	fseek(file, 78, SEEK_SET);	// header 44 byte
-	fread(wavData1, sizeof(char), WAV_SIZE, file);
+	int samplesRead = fread(wavData1, sizeof(char), WAV_SIZE, file);
+	printf("samples read %d\n", samplesRead);
 	
 	fclose(file);
 	
@@ -149,6 +150,10 @@ int main(int argc, char **argv) {
 		
 	// Open the PCM output
 	int err = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
+	if (err < 0) {
+		printf("Play-back open error: %s\n", snd_strerror(err));
+		exit(EXIT_FAILURE);
+	}
 	
 	// Configure parameters of PCM output
 	err = snd_pcm_set_params(handle,
@@ -158,6 +163,10 @@ int main(int argc, char **argv) {
 		SAMPLE_RATE,
 		0,			// Allow software resampling
 		50000);		// 0.05 seconds per buffer
+	if (err < 0) {
+		printf("Play-back configuration error: %s\n", snd_strerror(err));
+		exit(EXIT_FAILURE);
+	}
 	
 	fflush(stdout);
 	
