@@ -110,7 +110,7 @@ void AplayString(string s, int key);
 
 int SetAlsa(int flag);
 
-int PlayAlsaSHM(short* wavData, KeyStartSet* keyStartSet);
+int PlayAlsaSHM(int key, KeyStartSet* keyStartSet);
 int PlayPA(int key);
 int PlayPAWithThread(void* key); 
  
@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
 	
 	
 	/* fork幾個播音樂的程式 */
-	for(int i = 0; i < 5; i++){
+	for(int i = 0; i < FORK_SIZE; i++){
 		if(SetAlsa(i) == 0)
 			return 0;
 	}
@@ -199,7 +199,7 @@ int main(int argc, char **argv) {
 		for(int i = 0; i < 48; i++){
 			if(CheckKey(i)){
 				if(!keyPlaying[i]){
-					PlayAlsaSHM(wavData[i], keyStartSet);
+					PlayAlsaSHM(i, keyStartSet);
 				}
 				keyPlaying[i] = true;
 			}
@@ -289,7 +289,7 @@ int SetAlsa(int flag){
 			return fpid;
 		}
 		
-		/* setup 
+		/* setup */
 		short wavDataM[KEY_SIZE][WAV_SIZE];
 		for(int i = 0; i < 48; i++) {
 			
@@ -343,14 +343,16 @@ int SetAlsa(int flag){
 				//snd_pcm_writei(handle, silence, SILENCE_LENGTH * sizeof(short));
 			//printf("receive play at %d\n", flag);
 			
-			memcpy(wavData, keyStartSet->WavData[keyStartSet->QueueHead], sizeof(wavData));
+			//memcpy(wavData, keyStartSet->WavData[keyStartSet->QueueHead], sizeof(wavData));
+			int keyStart = keyStartSet->KeyStart[keyStartSet->QueueHead];
 			
 			keyStartSet->QueueHead = keyStartSet->QueueHead == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueHead+1;
 			keyStartSet->ForkFlag  = keyStartSet->ForkFlag  == FORK_SIZE-1  ?            0          : keyStartSet->ForkFlag+1;
 			
 			//printf("receive play at %d\n", flag);
 		
-			short* pointer = wavData;
+			//short* pointer = wavData;
+			short* pointer = wavDataM[keyStart];
 			snd_pcm_sframes_t frames;
 			snd_pcm_sframes_t totalFrames = 0;
 			
@@ -376,13 +378,12 @@ int SetAlsa(int flag){
     return fpid;
 }
 
-int PlayAlsaSHM(short* wavData, KeyStartSet* keyStartSet){
+int PlayAlsaSHM(int key, KeyStartSet* keyStartSet){
 	
 	keyStartSet->QueueLock = true;
 	
-	memcpy(keyStartSet->WavData[keyStartSet->QueueTail], wavData, sizeof(short) * WAV_SIZE);
-	
-	//printf("send data: %d %d %d %d %d %d %d %d\n", wavData[0], wavData[1], wavData[2], wavData[3], wavData[4], wavData[5], wavData[6], wavData[7]);
+	//memcpy(keyStartSet->WavData[keyStartSet->QueueTail], wavData, sizeof(short) * WAV_SIZE);
+	keyStartSet->KeyStart[QueueTail] = key;
 	
 	keyStartSet->QueueTail = keyStartSet->QueueTail == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueTail+1;
 	
