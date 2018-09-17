@@ -378,8 +378,6 @@ int SetAlsa(int flag){
 
 int PlayAlsaSHM(short* wavData, KeyStartSet* keyStartSet){
 	
-	//printf("play!!\n");
-	
 	keyStartSet->QueueLock = true;
 	
 	memcpy(keyStartSet->WavData[keyStartSet->QueueTail], wavData, sizeof(short) * WAV_SIZE);
@@ -389,6 +387,8 @@ int PlayAlsaSHM(short* wavData, KeyStartSet* keyStartSet){
 	keyStartSet->QueueTail = keyStartSet->QueueTail == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueTail+1;
 	
 	keyStartSet->QueueLock = false;
+	
+	printf("play!!\n");
 	
 	return 1;
 }
