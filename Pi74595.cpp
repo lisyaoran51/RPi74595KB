@@ -355,6 +355,7 @@ int SetAlsa(int flag){
 			snd_pcm_sframes_t totalFrames = 0;
 			
 			err = snd_pcm_pause(handle, 0);
+			err = snd_pcm_prepare(handle);
 		
 			//snd_pcm_writei(handle, wavData, WAV_SIZE * sizeof(short));
 			while(totalFrames < WAV_SIZE * sizeof(short) / 2 ){
