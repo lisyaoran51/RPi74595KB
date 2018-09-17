@@ -383,7 +383,7 @@ int PlayAlsaSHM(int key, KeyStartSet* keyStartSet){
 	keyStartSet->QueueLock = true;
 	
 	//memcpy(keyStartSet->WavData[keyStartSet->QueueTail], wavData, sizeof(short) * WAV_SIZE);
-	keyStartSet->KeyStart[QueueTail] = key;
+	keyStartSet->KeyStart[keyStartSet->QueueTail] = key;
 	
 	keyStartSet->QueueTail = keyStartSet->QueueTail == QUEUE_SIZE-1 ?			 0 			: keyStartSet->QueueTail+1;
 	
